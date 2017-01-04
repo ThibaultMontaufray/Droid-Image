@@ -16,9 +16,12 @@ namespace Droid_Image
 
             Uri proxy = WebRequest.DefaultWebProxy.GetProxy(new Uri(url));
             var request = (HttpWebRequest)WebRequest.Create(url);
-            
-            request.Proxy = new WebProxy(Tools4Libraries.Params.WebProxyHost, proxy.Port);
-            request.Proxy.Credentials = new NetworkCredential(Tools4Libraries.Params.WebProxyLogin, Tools4Libraries.Params.WebProxyPassword);
+
+            if (!string.IsNullOrEmpty(Tools4Libraries.Params.WebProxyHost))
+            {
+                request.Proxy = new WebProxy(Tools4Libraries.Params.WebProxyHost, proxy.Port);
+                request.Proxy.Credentials = new NetworkCredential(Tools4Libraries.Params.WebProxyLogin, Tools4Libraries.Params.WebProxyPassword);
+            }
             request.Accept = "text/html, application/xhtml+xml, */*";
             request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko";
 
@@ -58,8 +61,11 @@ namespace Droid_Image
                 {
                     Uri proxy = WebRequest.DefaultWebProxy.GetProxy(new Uri(url));
                     var request = (HttpWebRequest)WebRequest.Create(url);
-                    request.Proxy = new WebProxy(Tools4Libraries.Params.WebProxyHost, proxy.Port);
-                    request.Proxy.Credentials = new NetworkCredential(Tools4Libraries.Params.WebProxyLogin, Tools4Libraries.Params.WebProxyPassword);
+                    if (!string.IsNullOrEmpty(Tools4Libraries.Params.WebProxyHost))
+                    {
+                        request.Proxy = new WebProxy(Tools4Libraries.Params.WebProxyHost, proxy.Port);
+                        request.Proxy.Credentials = new NetworkCredential(Tools4Libraries.Params.WebProxyLogin, Tools4Libraries.Params.WebProxyPassword);
+                    }
                     var response = (HttpWebResponse)request.GetResponse();
                     
                     using (Stream dataStream = response.GetResponseStream())

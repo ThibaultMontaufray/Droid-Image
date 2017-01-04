@@ -203,6 +203,13 @@ namespace Droid_Image
             picture.RotateFlip(RotateFlipType.Rotate180FlipX);
             return picture;
         }
+        [Description("french[chercher.internet(image.nom)];english[research.web(picture.name)]")]
+        public static Image ACTION_135_research_web(string pictureName)
+        {
+            _this.TextSearch = pictureName;
+            _this.LaunchGoogleImg();
+            return _this._picturebox.Image;
+        }
         #endregion
 
         public override bool Open(object o)

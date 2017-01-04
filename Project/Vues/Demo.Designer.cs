@@ -33,10 +33,11 @@
             // Demo
             // 
             this.ClientSize = new System.Drawing.Size(784, 566);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Demo";
             this.Text = "Demo";
             this.ResumeLayout(false);
+
         }
 
         #endregion

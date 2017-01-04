@@ -5,7 +5,7 @@
     <ProjectGuid>{9FD7AAF3-3236-474A-9017-BE10BF369E7E}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>Droid_Image</RootNamespace>
     <AssemblyName>Droid_Image</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
@@ -42,7 +42,8 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Droid_Image.Program</StartupObject>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <Prefer32Bit>false</Prefer32Bit>
