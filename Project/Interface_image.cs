@@ -1126,7 +1126,7 @@ namespace Droid_Image
                 _sheet.Controls.Add(_picturebox);
 
                 _buttonValidation = new Button();
-                _buttonValidation.Image = Tools4Libraries.Resources.ResourceIconSet32Default.validation;
+                _buttonValidation.Image = Tools4Libraries.Resources.ResourceIconSet32Default.accept;
                 _buttonValidation.BackColor = Color.Transparent;
                 _buttonValidation.UseVisualStyleBackColor = false;
                 _buttonValidation.FlatAppearance.BorderSize = 0;
@@ -1698,11 +1698,11 @@ namespace Droid_Image
         }
         private void _buttonValidation_MouseLeave(object sender, EventArgs e)
         {
-            _buttonValidation.Image = Tools4Libraries.Resources.ResourceIconSet32Default.validation;
+            _buttonValidation.Image = Tools4Libraries.Resources.ResourceIconSet32Default.accept;
         }
         private void _buttonValidation_MouseHover(object sender, EventArgs e)
         {
-            _buttonValidation.Image = Tools4Libraries.Resources.ResourceIconSet32Default.validation_hover;
+            _buttonValidation.Image = Tools4Libraries.Resources.ResourceIconSet32Default.accept;
         }
         private void _timer_Tick(object sender, EventArgs e)
         {

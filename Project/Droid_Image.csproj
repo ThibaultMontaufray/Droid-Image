@@ -112,8 +112,9 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Tools4Libraries">
-      <HintPath>..\Tools4Libraries\lib\4.0\Tools4Libraries.dll</HintPath>
+    <Reference Include="Tools4Libraries, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Tools4Libraries.1.0.10\lib\4.0\Tools4Libraries.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\QRCoder.1.1.9\lib\net40\UnityEngine.dll</HintPath>
