@@ -33,7 +33,7 @@
             // Demo
             // 
             this.ClientSize = new System.Drawing.Size(784, 566);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "Demo";
             this.Text = "Demo";
             this.ResumeLayout(false);
