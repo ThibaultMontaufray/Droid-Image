@@ -1,5 +1,5 @@
 language: csharp
-solution: project/Droid_Image.sln
+solution: Project/Droid_Image.sln
 mono: latest
 notifications:
   email: false
