@@ -50,7 +50,7 @@ namespace Droid_Image
         private TrackBar _trackbar;
 		private Label _tracklabel;
 		private Stream _stream;
-        private Image _img;
+        private Image _currentImage;
 		private bool _openned;
 		private bool _visibletoolpanel;
         private double _zoomFactor;
@@ -75,6 +75,7 @@ namespace Droid_Image
         private List<string> _webSearchUrls = null;
         private string _lastOrder = string.Empty;
         private int _indexImageWeb;
+        private string _serialiseString;
         #endregion
 
         #region Properties
@@ -112,10 +113,10 @@ namespace Droid_Image
         }
         public Image CurrentImage
         {
-            get { return _img; }
+            get { return _currentImage; }
             set
             {
-                _img = value;
+                _currentImage = value;
                 if (ImageChanged != null) { ImageChanged(null, null); }
             }
         }
@@ -209,6 +210,20 @@ namespace Droid_Image
             _this.TextSearch = pictureName;
             _this.LaunchGoogleImg();
             return _this._picturebox.Image;
+        }
+        [Description("french[serialiser.image(image)];english[serialize.image(picture)]")]
+        public static string ACTION_136_serialize_image(Image image)
+        {
+            _this.CurrentImage = image;
+            _this.LaunchSerializeImage();
+            return _this._serialiseString;
+        }
+        [Description("french[deserialiser.image(string)];english[unserialize.image(string)]")]
+        public static Image ACTION_137_unserialize_image(string serialise)
+        {
+            _this._serialiseString = serialise;
+            _this.LaunchUnserializeString();
+            return _this._currentImage;
         }
         #endregion
 
@@ -431,7 +446,7 @@ namespace Droid_Image
             }
             catch (Exception exp3711)
             {
-                Log.write("[ CRT : 3711 ] Cannot execute the command." + exp3711.Message);
+                Log.Write("[ CRT : 3711 ] Cannot execute the command." + exp3711.Message);
             }
 		}
 		public RibbonTab BuildToolBar()
@@ -559,7 +574,7 @@ namespace Droid_Image
             }
             catch (Exception exp3709)
             {
-                Log.write("[ ERR : 3709 ] Cannot load the previews picture." + exp3709.Message);
+                Log.Write("[ ERR : 3709 ] Cannot load the previews picture." + exp3709.Message);
             }
         }
         private void LaunchNext()
@@ -596,7 +611,7 @@ namespace Droid_Image
             }
             catch (Exception exp3710)
             {
-                Log.write("[ ERR : 3710 ] Cannot load the next picture." + exp3710.Message);
+                Log.Write("[ ERR : 3710 ] Cannot load the next picture." + exp3710.Message);
             }
         }
         private void LaunchUndo()
@@ -975,6 +990,39 @@ namespace Droid_Image
             else { _timer.Stop(); }
             OnDiaporamaLaunched(_flagDiaporama, null);
         }
+        private void LaunchSerializeImage()
+        {
+            if (_currentImage != null)
+            {
+                MemoryStream ms = new MemoryStream();
+                _currentImage.Save(ms, _currentImage.RawFormat);
+                byte[] array = ms.ToArray();
+                string imgString = Convert.ToBase64String(array);
+                _serialiseString = Convert.ToBase64String(array);
+            }
+            else
+            { 
+                _serialiseString = string.Empty;
+            }
+        }
+        private void LaunchUnserializeString()
+        {
+            if (!string.IsNullOrEmpty(_serialiseString))
+            {
+                if (_serialiseString == null)
+                {
+                    Log.Write("[ INF : 2702 ] Image string doesn't exist.");
+                    _currentImage = null;
+                }
+                byte[] array = Convert.FromBase64String(_serialiseString);
+                Image image = Image.FromStream(new MemoryStream(array));
+                _currentImage = image;
+            }
+            else
+            {
+                _currentImage = null;
+            }
+        }
         #endregion
 
         #region Methods Private
@@ -1085,7 +1133,7 @@ namespace Droid_Image
             catch (Exception exp3700)
             {
                 _tsm.DisableAll();
-                Log.write("[ DEB : 3700 ]\n" + exp3700.Message);
+                Log.Write("[ DEB : 3700 ]\n" + exp3700.Message);
             }
             
             _picturebox.Image = CurrentImage;
@@ -1104,7 +1152,7 @@ namespace Droid_Image
                 }
                 catch (Exception exp3702)
                 {
-                    Log.write("[ ERR : 3702 ] Error while closing the old picture panel \n" + exp3702.Message);
+                    Log.Write("[ ERR : 3702 ] Error while closing the old picture panel \n" + exp3702.Message);
                 }
             }
             else
@@ -1225,7 +1273,7 @@ namespace Droid_Image
         }
 		private static Bitmap RotateImage(Image image, float angle)
 		{
-			if (image == null) Log.write("[ERR : 0300] No Image found !");
+			if (image == null) Log.Write("[ERR : 0300] No Image found !");
 			
 			PointF offset = new PointF((float)image.Width / 2, (float)image.Height / 2);
 			

@@ -103,7 +103,6 @@ namespace Droid_Image
 
         private RibbonButton _ts_web_google;
         private RibbonButton _ts_web_flikr;
-        private RibbonButton _ts_web_pixabay;
 
         private bool _visibletoolpanel;
         public static float _rotationvalue;
@@ -163,7 +162,6 @@ namespace Droid_Image
             _ts_main_open.Enabled = true;
             _ts_web_google.Enabled = true;
             _ts_web_flikr.Enabled = true;
-            _ts_web_pixabay.Enabled = true;
             _valueLookingFor.Enabled = true;
             _ts_web_research.Enabled = true;
 
@@ -185,7 +183,6 @@ namespace Droid_Image
             _ts_main_open.Enabled = true;
             _ts_web_google.Enabled = true;   
             _ts_web_flikr.Enabled = true;
-            _ts_web_pixabay.Enabled = true;
             _valueLookingFor.Enabled = true;
             _ts_web_research.Enabled = true;
 
@@ -220,13 +217,13 @@ namespace Droid_Image
             _ts_undo = new RibbonButton("Undo");
             _ts_undo.ToolTip = "Undo";
             _ts_undo.Click += new EventHandler(tsb_Click);
-            _ts_undo.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.undo1;
+            _ts_undo.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.arrow_undo;
             _ts_undo.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_redo = new RibbonButton("Redo");
             _ts_redo.ToolTip = "Redo";
             _ts_redo.Click += new EventHandler(tsb_Click);
-            _ts_redo.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.redo1;
+            _ts_redo.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.arrow_redo;
             _ts_redo.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_copy = new RibbonButton("Copy");
@@ -409,20 +406,20 @@ namespace Droid_Image
         {
             _ts_code_qr = new RibbonButton("Uncrypt QR code");
             _ts_code_qr.Click += new EventHandler(tsb_Click);
-            _ts_code_qr.Image = Tools4Libraries.Resources.ResourceIconSet32Default.qr_code_generator_399889_1282875718;
-            _ts_code_qr.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.qr_code_generator_399889_1282875718;
+            _ts_code_qr.Image = Tools4Libraries.Resources.ResourceIconSet32Default.qrcode;
+            _ts_code_qr.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.qrcode;
             _ts_code_qr.MaxSizeMode = RibbonElementSizeMode.Medium;
 
             _ts_code_barre = new RibbonButton("Code Barres");
             _ts_code_barre.Click += new EventHandler(tsb_Click);
-            _ts_code_barre.Image = Tools4Libraries.Resources.ResourceIconSet32Default.CodeBarreWC;
-            _ts_code_barre.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.CodeBarreWC;
+            _ts_code_barre.Image = Tools4Libraries.Resources.ResourceIconSet32Default.barcode;
+            _ts_code_barre.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.barcode;
             _ts_code_barre.MaxSizeMode = RibbonElementSizeMode.Medium;
 
             _ts_recognition = new RibbonButton("Recognition");
             _ts_recognition.Click += new EventHandler(tsb_Click);
-            _ts_recognition.Image = Tools4Libraries.Resources.ResourceIconSet32Default.recognition;
-            _ts_recognition.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.recognition;
+            _ts_recognition.Image = Tools4Libraries.Resources.ResourceIconSet32Default.brain_trainer;
+            _ts_recognition.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.brain_trainer;
             _ts_recognition.MaxSizeMode = RibbonElementSizeMode.Medium;
 
             _panelParsing = new System.Windows.Forms.RibbonPanel("Parsing");
@@ -492,11 +489,6 @@ namespace Droid_Image
             _ts_web_flikr.Click += new EventHandler(tsb_Click);
             _ts_web_flikr.Image = Tools4Libraries.Resources.ResourceIconSet32Default.flickr;
             _ts_web_flikr.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.flickr;
-
-            _ts_web_pixabay = new RibbonButton("Pixabay");
-            _ts_web_pixabay.Click += new EventHandler(tsb_Click);
-            _ts_web_pixabay.Image = Tools4Libraries.Resources.ResourceIconSet32Default.pixabay;
-            _ts_web_pixabay.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.pixabay;
             
             _ts_web_research = new RibbonButton();
             _ts_web_research.Name = "google";
@@ -505,7 +497,6 @@ namespace Droid_Image
             _ts_web_research.MinSizeMode = RibbonElementSizeMode.Compact;
             _ts_web_research.DropDownItems.Add(_ts_web_google);
             _ts_web_research.DropDownItems.Add(_ts_web_flikr);
-            _ts_web_research.DropDownItems.Add(_ts_web_pixabay);
         }
         private void BuildToolsAdjustment()
         {
@@ -526,12 +517,12 @@ namespace Droid_Image
 
             _ts_tool_gray = new RibbonButton("Gray");
             _ts_tool_gray.Click += new EventHandler(tsb_Click);
-            _ts_tool_gray.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.image_gray;
+            _ts_tool_gray.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.convert_color_to_gray;
             _ts_tool_gray.MinSizeMode = RibbonElementSizeMode.DropDown;
 
             _ts_tool_invert = new RibbonButton("Invert");
             _ts_tool_invert.Click += new EventHandler(tsb_Click);
-            _ts_tool_invert.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.image_invert;
+            _ts_tool_invert.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.image;
             _ts_tool_invert.MinSizeMode = RibbonElementSizeMode.DropDown;
 
             _ts_tool_adjust = new RibbonButton("Adjust");
@@ -826,7 +817,7 @@ namespace Droid_Image
             }
             catch (Exception expxxx)
             {
-                Log.write("[ DEB : xxxx ] Error on the event call for action appened." + expxxx.Message);
+                Log.Write("[ DEB : xxxx ] Error on the event call for action appened." + expxxx.Message);
             }
         }
         private void tsb_visibletoolpanel_Click(object sender, EventArgs e)
@@ -867,11 +858,6 @@ namespace Droid_Image
                             _ts_web_research.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.flickr;
                             _ts_web_research.Name = button.Text.ToLower();
                         }
-                        if (button.Text.Equals("Pixabay"))
-                        {
-                            _ts_web_research.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.pixabay;
-                            _ts_web_research.Name = button.Text.ToLower();
-                        }
                     }
                     SelectButton(button);
                     ToolBarEventArgs action = new ToolBarEventArgs(string.IsNullOrEmpty(button.Text) ? button.ToolTip : button.Text);
@@ -880,7 +866,7 @@ namespace Droid_Image
             }
             catch (Exception expxxx)
             {
-                Log.write("[ DEB : xxxx ] Error on the event call for on action \"insert text\" execution." + expxxx.Message);
+                Log.Write("[ DEB : xxxx ] Error on the event call for on action \"insert text\" execution." + expxxx.Message);
             }
         }
         private void _valueLookingFor_TextBoxTextChanged(object sender, EventArgs e)
@@ -892,7 +878,7 @@ namespace Droid_Image
             }
             catch (Exception expxxx)
             {
-                Log.write("[ DEB : xxxx ] Error on the event call for on action \"layer_resize\" execution." + expxxx.Message);
+                Log.Write("[ DEB : xxxx ] Error on the event call for on action \"layer_resize\" execution." + expxxx.Message);
             }
         }
         private void _valueLookingFor_TextBoxKeyDown(object sender, KeyEventArgs e)
@@ -901,7 +887,6 @@ namespace Droid_Image
             {
                 if (_ts_web_research.Name.Equals("google")) { tsb_Click(_ts_web_google, null); }
                 if (_ts_web_research.Name.Equals("flikr")) { tsb_Click(_ts_web_flikr, null); }
-                if (_ts_web_research.Name.Equals("pixabay")) { tsb_Click(_ts_web_pixabay, null); }
             }
         }
         private void _intImg_DiaporamaLaunched(object sender, EventArgs e)
