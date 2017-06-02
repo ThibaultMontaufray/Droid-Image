@@ -9,6 +9,7 @@ namespace Droid_Image
     public partial class Demo : Form
     {
         #region Attribute
+        private Ribbon _ribbon;
         private Interface_image _intImg;
         private MessageDisplay _messageDisplay;
         #endregion
@@ -30,29 +31,41 @@ namespace Droid_Image
         #region Methods private
         private void Init()
         {
+            InitRibbon();
+            InitInterface();
+            InitMessageDisplay();
+        }
+        private void InitInterface()
+        {
             _intImg = new Interface_image();
             _intImg.Tsm.ActionAppened += Tsm_ActionAppened;
             _intImg.MessageAvailable += _intImg_MessageAvailable;
             _intImg.ImageChanged += _intImg_ImageChanged;
-
-            _intImg.Sheet.Dock = DockStyle.Fill;
+            _intImg.Sheet.Dock = DockStyle.None;
+            _intImg.Sheet.Top = 125;
+            _intImg.Sheet.Left = 0;
+            _intImg.Sheet.Width = this.Width - 16;
+            _intImg.Sheet.Height = this.Height - 164;
+            _intImg.Sheet.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right) | System.Windows.Forms.AnchorStyles.Bottom)));
             this.Controls.Add(_intImg.Sheet);
-
-            InitRibbon();
-            InitMessageDisplay();
+            _ribbon.Tabs.Add(_intImg.Tsm);
         }
         private void InitRibbon()
         {
-            Ribbon rb = new Ribbon();
-            rb.Tabs.Add(_intImg.Tsm);
-            rb.Height = 150;
-            rb.ThemeColor = RibbonTheme.Black;
-            rb.OrbDropDown.Width = 150;
-            rb.OrbStyle = RibbonOrbStyle.Office_2013;
-            rb.OrbText = "File";
-            rb.QuickAccessToolbar.MenuButtonVisible = false;
-            rb.QuickAccessToolbar.Visible = false;
-            rb.QuickAccessToolbar.MinSizeMode = RibbonElementSizeMode.Compact;
+            _ribbon = new Ribbon();
+            _ribbon.Height = 150;
+            _ribbon.ThemeColor = RibbonTheme.Black;
+            _ribbon.OrbDropDown.Width = 150;
+            _ribbon.OrbStyle = RibbonOrbStyle.Office_2013;
+            _ribbon.OrbText = "File";
+            _ribbon.QuickAccessToolbar.MenuButtonVisible = false;
+            _ribbon.QuickAccessToolbar.Visible = false;
+            _ribbon.QuickAccessToolbar.MinSizeMode = RibbonElementSizeMode.Compact;
+            _ribbon.Dock = DockStyle.None;
+            _ribbon.Top = -25;
+            _ribbon.Left = 0;
+            _ribbon.Width = this.Width;
+            _ribbon.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 
             //rb.QuickAccessToolbar.Visible = false;
 
@@ -64,17 +77,18 @@ namespace Droid_Image
             b_exit.SmallImage = Tools4Libraries.Resources.ResourceIconSet32Default.door_out;
             b_exit.Click += B_exit_Click;
 
-            rb.OrbDropDown.MenuItems.Add(b_open);
-            rb.OrbDropDown.MenuItems.Add(b_exit);
+            _ribbon.OrbDropDown.MenuItems.Add(b_open);
+            _ribbon.OrbDropDown.MenuItems.Add(b_exit);
 
-            this.Controls.Add(rb);
+            this.Controls.Add(_ribbon);
         }
         private void InitMessageDisplay()
         {
-            _messageDisplay = new MessageDisplay();
-            _messageDisplay.Dock = DockStyle.Top;
-            _messageDisplay.Hide();
-            _intImg.PicturePreview.Controls.Add(_messageDisplay);
+            //_messageDisplay = new MessageDisplay();
+            //_messageDisplay.Dock = DockStyle.None;
+            //_messageDisplay.Hide();
+            //_intImg.PicturePreview.Controls.Add(_messageDisplay);
+            //_messageDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
         }
         private void MessageShow(object message)
         {
@@ -105,11 +119,11 @@ namespace Droid_Image
         }
         private void _intImg_ImageChanged(object sender, System.EventArgs e)
         {
-            _messageDisplay.Hide();
+            //_messageDisplay.Hide();
         }
         private void Demo_Resize(object sender, System.EventArgs e)
         {
-            _messageDisplay.Anchor = AnchorStyles.Top & AnchorStyles.Left;
+            //_messageDisplay.Anchor = AnchorStyles.Top & AnchorStyles.Left;
         }
         #endregion
     }

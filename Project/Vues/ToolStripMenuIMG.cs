@@ -100,6 +100,7 @@ namespace Droid_Image
         private RibbonButton _ts_code_qr;
         private RibbonButton _ts_code_barre;
         private RibbonButton _ts_recognition;
+        private RibbonButton _ts_compare;
 
         private RibbonButton _ts_web_google;
         private RibbonButton _ts_web_flikr;
@@ -404,28 +405,36 @@ namespace Droid_Image
         }
         private void BuildPanelParsing()
         {
-            _ts_code_qr = new RibbonButton("Uncrypt QR code");
+            _ts_code_qr = new RibbonButton("QR code");
             _ts_code_qr.Click += new EventHandler(tsb_Click);
             _ts_code_qr.Image = Tools4Libraries.Resources.ResourceIconSet32Default.qrcode;
             _ts_code_qr.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.qrcode;
-            _ts_code_qr.MaxSizeMode = RibbonElementSizeMode.Medium;
+            //_ts_code_qr.MaxSizeMode = RibbonElementSizeMode.Medium;
 
             _ts_code_barre = new RibbonButton("Code Barres");
             _ts_code_barre.Click += new EventHandler(tsb_Click);
             _ts_code_barre.Image = Tools4Libraries.Resources.ResourceIconSet32Default.barcode;
             _ts_code_barre.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.barcode;
-            _ts_code_barre.MaxSizeMode = RibbonElementSizeMode.Medium;
+            //_ts_code_barre.MaxSizeMode = RibbonElementSizeMode.Medium;
 
-            _ts_recognition = new RibbonButton("Recognition");
+            _ts_recognition = new RibbonButton("Picture analysing");
             _ts_recognition.Click += new EventHandler(tsb_Click);
             _ts_recognition.Image = Tools4Libraries.Resources.ResourceIconSet32Default.brain_trainer;
             _ts_recognition.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.brain_trainer;
-            _ts_recognition.MaxSizeMode = RibbonElementSizeMode.Medium;
+            //_ts_recognition.MaxSizeMode = RibbonElementSizeMode.Medium;
+
+            _ts_compare = new RibbonButton("Compare");
+            _ts_compare.Click += new EventHandler(tsb_Click);
+            _ts_compare.Image = Tools4Libraries.Resources.ResourceIconSet32Default.picture_frame;
+            _ts_compare.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.picture_frame;
+            //_ts_recognition.MaxSizeMode = RibbonElementSizeMode.Medium;
 
             _panelParsing = new System.Windows.Forms.RibbonPanel("Parsing");
-            _panelParsing.Image = Tools4Libraries.Resources.ResourceIconSet16Default.scanner;_panelParsing.Items.Add(_ts_code_qr);
+            _panelParsing.Image = Tools4Libraries.Resources.ResourceIconSet16Default.scanner;
+            _panelParsing.Items.Add(_ts_code_qr);
             _panelParsing.Items.Add(_ts_code_barre);
             _panelParsing.Items.Add(_ts_recognition);
+            _panelParsing.Items.Add(_ts_compare);
             this.Panels.Add(_panelParsing);
         }
         private void BuildPanelDrawing()

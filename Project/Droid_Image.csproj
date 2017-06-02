@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
-  <Import Project="packages\OpenCvSharp-AnyCPU.2.4.10.20160316\build\OpenCvSharp-AnyCPU.props" Condition="Exists('packages\OpenCvSharp-AnyCPU.2.4.10.20160316\build\OpenCvSharp-AnyCPU.props')" />
+  <Import Project="packages\OpenCvSharp-AnyCPU.2.4.10.20170126\build\OpenCvSharp-AnyCPU.props" Condition="Exists('packages\OpenCvSharp-AnyCPU.2.4.10.20170126\build\OpenCvSharp-AnyCPU.props')" />
   <PropertyGroup>
     <ProjectGuid>{9FD7AAF3-3236-474A-9017-BE10BF369E7E}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -59,28 +59,32 @@
       <HintPath>packages\ControlzEx.2.1.0-dev065\lib\net40\ControlzEx.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Droid_web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Droid_Web.1.0.4\lib\4.5.1\Droid_web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="OpenCvSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
-      <HintPath>packages\OpenCvSharp-AnyCPU.2.4.10.20160316\lib\net45\OpenCvSharp.dll</HintPath>
+      <HintPath>packages\OpenCvSharp-AnyCPU.2.4.10.20170126\lib\net45\OpenCvSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OpenCvSharp.Blob, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
-      <HintPath>packages\OpenCvSharp-AnyCPU.2.4.10.20160316\lib\net45\OpenCvSharp.Blob.dll</HintPath>
+      <HintPath>packages\OpenCvSharp-AnyCPU.2.4.10.20170126\lib\net45\OpenCvSharp.Blob.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OpenCvSharp.CPlusPlus, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
-      <HintPath>packages\OpenCvSharp-AnyCPU.2.4.10.20160316\lib\net45\OpenCvSharp.CPlusPlus.dll</HintPath>
+      <HintPath>packages\OpenCvSharp-AnyCPU.2.4.10.20170126\lib\net45\OpenCvSharp.CPlusPlus.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OpenCvSharp.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
-      <HintPath>packages\OpenCvSharp-AnyCPU.2.4.10.20160316\lib\net45\OpenCvSharp.Extensions.dll</HintPath>
+      <HintPath>packages\OpenCvSharp-AnyCPU.2.4.10.20170126\lib\net45\OpenCvSharp.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OpenCvSharp.UserInterface, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
-      <HintPath>packages\OpenCvSharp-AnyCPU.2.4.10.20160316\lib\net45\OpenCvSharp.UserInterface.dll</HintPath>
+      <HintPath>packages\OpenCvSharp-AnyCPU.2.4.10.20170126\lib\net45\OpenCvSharp.UserInterface.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>packages\OpenTK.1.1.2349.61993\lib\NET40\OpenTK.dll</HintPath>
+    <Reference Include="OpenTK, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
@@ -94,11 +98,17 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>packages\Droid_Web.1.0.4\lib\4.5.1\System.Data.SqlServerCe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Forms.Ribbon, Version=3.5.8.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\officeribbon.3.5.8.4\lib\net20\System.Windows.Forms.Ribbon.dll</HintPath>
@@ -113,11 +123,11 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="Tools4Libraries, Version=1.0.11.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Tools4Libraries.1.0.16\lib\4.5.1\Tools4Libraries.dll</HintPath>
+      <HintPath>packages\Tools4Libraries.1.0.17\lib\4.5.1\Tools4Libraries.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Tools4Libraries.Slider, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Tools4Libraries.1.0.16\lib\4.5.1\Tools4Libraries.Slider.dll</HintPath>
+      <HintPath>packages\Tools4Libraries.1.0.17\lib\4.5.1\Tools4Libraries.Slider.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -131,20 +141,33 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
     <None Include="Scripts\jquery-3.0.0.min.map" />
     <None Include="Scripts\jquery-3.0.0.slim.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ImageHandler.cs" />
-    <Compile Include="Interface_image.cs" />
-    <Compile Include="ParsingPicture.cs" />
+    <Compile Include="Controler\ImageHandler.cs" />
+    <Compile Include="Controler\Interface_image.cs" />
+    <Compile Include="Controler\ParsingPicture.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resource.Designer.cs">
+    <Compile Include="Properties\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ProjectInstaller.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Service\ProjectInstaller.Designer.cs">
+      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Service.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Service\Service.Designer.cs">
+      <DependentUpon>Service.cs</DependentUpon>
     </Compile>
     <Compile Include="Vues\MessageDisplay.cs">
       <SubType>UserControl</SubType>
@@ -170,12 +193,18 @@
     <Compile Include="Vues\ZoomPanImageBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="WebGoogleImage.cs" />
+    <Compile Include="Controler\WebGoogleImage.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resource.resx">
+    <EmbeddedResource Include="Properties\Resource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Service\ProjectInstaller.resx">
+      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Service\Service.resx">
+      <DependentUpon>Service.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Vues\Demo.resx">
       <DependentUpon>Demo.cs</DependentUpon>
@@ -197,6 +226,11 @@
     <Content Include="Resources\DIAMOND.BMP" />
     <Content Include="Resources\ELLIPSE.BMP" />
     <Content Include="Resources\GROUP.BMP" />
+    <EmbeddedResource Include="Resources\XML_Recognition\eyes.xml" />
+    <EmbeddedResource Include="Resources\XML_Recognition\front_face.xml" />
+    <EmbeddedResource Include="Resources\XML_Recognition\hand.xml" />
+    <None Include="Resources\mask.png" />
+    <None Include="Resources\mask.jpg" />
     <Content Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.0.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.0.0.js" />
@@ -219,11 +253,17 @@
   <ItemGroup>
     <Folder Include="Data\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="ImageComparison\Droid_Image.ImageComparison.csproj">
+      <Project>{9317de4a-213d-4afc-b58f-ed401204534a}</Project>
+      <Name>Droid_Image.ImageComparison</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>Ce projet fait référence à des packages NuGet qui sont manquants sur cet ordinateur. Utilisez l'option de restauration des packages NuGet pour les télécharger. Pour plus d'informations, consultez http://go.microsoft.com/fwlink/?LinkID=322105. Le fichier manquant est : {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\OpenCvSharp-AnyCPU.2.4.10.20160316\build\OpenCvSharp-AnyCPU.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\OpenCvSharp-AnyCPU.2.4.10.20160316\build\OpenCvSharp-AnyCPU.props'))" />
+    <Error Condition="!Exists('packages\OpenCvSharp-AnyCPU.2.4.10.20170126\build\OpenCvSharp-AnyCPU.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\OpenCvSharp-AnyCPU.2.4.10.20170126\build\OpenCvSharp-AnyCPU.props'))" />
   </Target>
 </Project>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.ServiceProcess;
 
 namespace Droid_Image
 {
@@ -14,6 +15,13 @@ namespace Droid_Image
         [STAThread]
         static void Main()
         {
+            //ServiceBase[] ServicesToRun;
+            //ServicesToRun = new ServiceBase[]
+            //{
+            //    new Service(null)
+            //};
+            //ServiceBase.Run(ServicesToRun);
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Demo());

@@ -12,15 +12,15 @@
          <Members>
           <Member Name="#GetHtmlCode(System.String)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Ne pas supprimer d'objets plusieurs fois" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2017-02-25 08:52:31Z" FixCategory="DependsOnFix">
-             <Issue Certainty="75" Level="Warning" Path="D:\Github\Droid-Image\Project" File="WebGoogleImage.cs" Line="38">L'objet 'dataStream' peut être supprimé plusieurs fois dans la méthode 'GoogleImage.GetHtmlCode(string)'. Pour éviter de générer un System.ObjectDisposedException, n'appelez pas la méthode Dispose plus d'une fois par objet.: Lines: 38</Issue>
+            <Message TypeName="Ne pas supprimer d'objets plusieurs fois" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2017-06-02 07:48:34Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Github\Droid-Image\Project\Controler" File="WebGoogleImage.cs" Line="38">L'objet 'dataStream' peut être supprimé plusieurs fois dans la méthode 'GoogleImage.GetHtmlCode(string)'. Pour éviter de générer un System.ObjectDisposedException, n'appelez pas la méthode Dispose plus d'une fois par objet.: Lines: 38</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#GetImage(System.String)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="Ne pas supprimer d'objets plusieurs fois" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2017-02-25 08:52:31Z" FixCategory="DependsOnFix">
-             <Issue Certainty="75" Level="Warning" Path="D:\Github\Droid-Image\Project" File="WebGoogleImage.cs" Line="79">L'objet 'dataStream' peut être supprimé plusieurs fois dans la méthode 'GoogleImage.GetImage(string)'. Pour éviter de générer un System.ObjectDisposedException, n'appelez pas la méthode Dispose plus d'une fois par objet.: Lines: 79</Issue>
+            <Message TypeName="Ne pas supprimer d'objets plusieurs fois" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2017-06-02 07:48:34Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Github\Droid-Image\Project\Controler" File="WebGoogleImage.cs" Line="79">L'objet 'dataStream' peut être supprimé plusieurs fois dans la méthode 'GoogleImage.GetImage(string)'. Pour éviter de générer un System.ObjectDisposedException, n'appelez pas la méthode Dispose plus d'une fois par objet.: Lines: 79</Issue>
             </Message>
            </Messages>
           </Member>
@@ -28,29 +28,29 @@
         </Type>
         <Type Name="ImageHandler" Kind="Class" Accessibility="Public" ExternallyVisible="True">
          <Messages>
-          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2017-02-25 08:52:31Z" FixCategory="DependsOnFix">
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2017-06-02 07:48:34Z" FixCategory="DependsOnFix">
            <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implémenter IDisposable sur 'ImageHandler' car il crée des membres des types IDisposable suivants : 'Bitmap'. Si 'ImageHandler' existait précédemment, le fait d'ajouter de nouveaux membres qui implémentent IDisposable pour ce type est considéré comme une modification avec rupture pour les utilisateurs existants.</Issue>
           </Message>
          </Messages>
         </Type>
         <Type Name="Interface_image" Kind="Class" Accessibility="Public" ExternallyVisible="True">
          <Messages>
-          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2017-02-25 08:52:31Z" FixCategory="DependsOnFix">
-           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implémenter IDisposable sur 'Interface_image' car il crée des membres des types IDisposable suivants : 'ToolStripMenuIMG', 'MemoryStream', 'Panel', 'PictureBox', 'Button', 'Timer', 'TrackBar', 'Label'. Si 'Interface_image' existait précédemment, le fait d'ajouter de nouveaux membres qui implémentent IDisposable pour ce type est considéré comme une modification avec rupture pour les utilisateurs existants.</Issue>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2017-06-02 07:48:34Z" FixCategory="DependsOnFix">
+           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implémenter IDisposable sur 'Interface_image' car il crée des membres des types IDisposable suivants : 'Bitmap', 'ToolStripMenuIMG', 'Panel', 'PictureBox', 'Button', 'Timer', 'TrackBar', 'Label'. Si 'Interface_image' existait précédemment, le fait d'ajouter de nouveaux membres qui implémentent IDisposable pour ce type est considéré comme une modification avec rupture pour les utilisateurs existants.</Issue>
           </Message>
          </Messages>
          <Members>
           <Member Name="#GetHtmlCode(System.String)" Kind="Method" Static="True" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="Ne pas supprimer d'objets plusieurs fois" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2017-02-25 08:52:31Z" FixCategory="DependsOnFix">
-             <Issue Certainty="75" Level="Warning" Path="D:\Github\Droid-Image\Project" File="Interface_image.cs" Line="1488">L'objet 'dataStream' peut être supprimé plusieurs fois dans la méthode 'Interface_image.GetHtmlCode(string)'. Pour éviter de générer un System.ObjectDisposedException, n'appelez pas la méthode Dispose plus d'une fois par objet.: Lines: 1488</Issue>
+            <Message TypeName="Ne pas supprimer d'objets plusieurs fois" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2017-06-02 07:48:34Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Github\Droid-Image\Project\Controler" File="Interface_image.cs" Line="1620">L'objet 'dataStream' peut être supprimé plusieurs fois dans la méthode 'Interface_image.GetHtmlCode(string)'. Pour éviter de générer un System.ObjectDisposedException, n'appelez pas la méthode Dispose plus d'une fois par objet.: Lines: 1620</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#GetImage(System.String)" Kind="Method" Static="True" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="Ne pas supprimer d'objets plusieurs fois" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2017-02-25 08:52:31Z" FixCategory="DependsOnFix">
-             <Issue Certainty="75" Level="Warning" Path="D:\Github\Droid-Image\Project" File="Interface_image.cs" Line="1521">L'objet 'dataStream' peut être supprimé plusieurs fois dans la méthode 'Interface_image.GetImage(string)'. Pour éviter de générer un System.ObjectDisposedException, n'appelez pas la méthode Dispose plus d'une fois par objet.: Lines: 1521</Issue>
+            <Message TypeName="Ne pas supprimer d'objets plusieurs fois" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2017-06-02 07:48:34Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="D:\Github\Droid-Image\Project\Controler" File="Interface_image.cs" Line="1653">L'objet 'dataStream' peut être supprimé plusieurs fois dans la méthode 'Interface_image.GetImage(string)'. Pour éviter de générer un System.ObjectDisposedException, n'appelez pas la méthode Dispose plus d'une fois par objet.: Lines: 1653</Issue>
             </Message>
            </Messages>
           </Member>
@@ -60,8 +60,19 @@
          <Members>
           <Member Name="#HideCaret(System.IntPtr)" Kind="Method" Static="True" Accessibility="Private" ExternallyVisible="False">
            <Messages>
-            <Message TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060" Status="Active" Created="2017-02-25 08:52:31Z" FixCategory="Breaking">
+            <Message TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060" Status="Active" Created="2017-06-02 07:48:34Z" FixCategory="Breaking">
              <Issue Certainty="95" Level="CriticalWarning">Étant donné qu'il s'agit d'une méthode P/Invoke, 'MessageDisplay.HideCaret(IntPtr)' doit être défini dans une classe nommée NativeMethods, SafeNativeMethods ou UnsafeNativeMethods.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="Service" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#SetServiceStatus(System.IntPtr,Droid_Image.Service+ServiceStatus&amp;)" Kind="Method" Static="True" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060" Status="Active" Created="2017-06-02 07:48:34Z" FixCategory="Breaking">
+             <Issue Certainty="95" Level="CriticalWarning">Étant donné qu'il s'agit d'une méthode P/Invoke, 'Service.SetServiceStatus(IntPtr, ref Service.ServiceStatus)' doit être défini dans une classe nommée NativeMethods, SafeNativeMethods ou UnsafeNativeMethods.</Issue>
             </Message>
            </Messages>
           </Member>

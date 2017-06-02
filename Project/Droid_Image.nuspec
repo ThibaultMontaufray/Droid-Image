@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Droid_Image</id>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <title>Droid_Image</title>
     <authors>Thibault MONTAUFRAY</authors>
     <owners>Servodroid</owners>
@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/ThibaultMontaufray/Droid_Image</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/ThibaultMontaufray/Tools4Libraries/master/ManagersDevComponents/servodroidIconColor.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>All tools to modify image (resize, crop, change in gray, draw on it, ...) and analyse it (face recognition, qr code and barecode decrypt, ...)</description>
+    <description>All tools to modify image (resize, crop, change in gray, draw on it, ...) and analyse it (face recognition, qr code and barecode decrypt, comparisons ...)</description>
     <copyright>Copyright 2015</copyright>
     <tags>Servodroid image recognition qrcode barcode</tags>
 	<dependencies>
