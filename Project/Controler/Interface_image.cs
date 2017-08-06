@@ -1,4 +1,4 @@
-// code 37 - 11
+// code 37 - 12
 /*
  * Crée par SharpDevelop.
  * Utilisateur: C357555
@@ -1129,18 +1129,25 @@ namespace Droid_Image
         }
         private int LaunchCompare()
         {
-            if (_comparisonImage == null)
+            int difference = 0;
+            try
             {
-                OpenFileDialog ofd = new OpenFileDialog();
-                if (ofd.ShowDialog() == DialogResult.OK)
+                if (_comparisonImage == null)
                 {
-                    _comparisonImage = Image.FromFile(ofd.FileName);
+                    OpenFileDialog ofd = new OpenFileDialog();
+                    if (ofd.ShowDialog() == DialogResult.OK)
+                    {
+                        _comparisonImage = Image.FromFile(ofd.FileName);
+                    }
                 }
+                Image clone = (Image)_currentImage.Clone();
+                difference = (int)(ImageTool.GetPercentageDifference(clone, _comparisonImage) * 100);
+                _comparisonImage = null;
             }
-            Image clone = (Image)_currentImage.Clone();
-            int difference = (int)(ImageTool.GetPercentageDifference(clone, _comparisonImage) * 100);
-            _comparisonImage = null;
-
+            catch (Exception exp)
+            {
+                Log.Write("[ INF : 3712 ] Cannot compare images.\r\nException : " + exp.Message);
+            }
             return difference;
         }
         #endregion
