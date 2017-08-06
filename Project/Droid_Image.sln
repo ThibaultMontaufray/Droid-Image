@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject", "UnitTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Droid_Image.ImageComparison", "ImageComparison\Droid_Image.ImageComparison.csproj", "{9317DE4A-213D-4AFC-B58F-ED401204534A}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "DroidImageSetup", "DroidImageSetup\DroidImageSetup.vdproj", "{221E30A5-0033-4BF5-9A5F-463DA5DA6D1B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{9317DE4A-213D-4AFC-B58F-ED401204534A}.Release|Any CPU.ActiveCfg = Release|x86
 		{9317DE4A-213D-4AFC-B58F-ED401204534A}.Release|x86.ActiveCfg = Release|x86
 		{9317DE4A-213D-4AFC-B58F-ED401204534A}.Release|x86.Build.0 = Release|x86
+		{221E30A5-0033-4BF5-9A5F-463DA5DA6D1B}.Debug|Any CPU.ActiveCfg = Debug
+		{221E30A5-0033-4BF5-9A5F-463DA5DA6D1B}.Debug|x86.ActiveCfg = Debug
+		{221E30A5-0033-4BF5-9A5F-463DA5DA6D1B}.Release|Any CPU.ActiveCfg = Release
+		{221E30A5-0033-4BF5-9A5F-463DA5DA6D1B}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

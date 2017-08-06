@@ -5,7 +5,7 @@
     <ProjectGuid>{9FD7AAF3-3236-474A-9017-BE10BF369E7E}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <OutputType>Library</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>Droid_Image</RootNamespace>
     <AssemblyName>Droid_Image</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
@@ -53,6 +53,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ServoIconImage.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ControlzEx, Version=2.1.0.0, Culture=neutral, PublicKeyToken=f08b075e934b7045, processorArchitecture=MSIL">
@@ -226,6 +229,7 @@
     <Content Include="Resources\DIAMOND.BMP" />
     <Content Include="Resources\ELLIPSE.BMP" />
     <Content Include="Resources\GROUP.BMP" />
+    <Content Include="ServoIconImage.ico" />
     <EmbeddedResource Include="Resources\XML_Recognition\eyes.xml" />
     <EmbeddedResource Include="Resources\XML_Recognition\front_face.xml" />
     <EmbeddedResource Include="Resources\XML_Recognition\hand.xml" />
