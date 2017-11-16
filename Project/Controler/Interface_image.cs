@@ -23,9 +23,24 @@ using com.google.zxing;
 using com.google.zxing.common;
 using System.Threading.Tasks;
 using Droid_Image.ImageComparison;
+using Tools4Libraries.Slider;
 
 namespace Droid_Image
 {
+    public enum Mode
+    {
+        VIEW,
+        EDITION,
+        ANALYSE
+    }
+    public enum Rotation
+    {
+        LEFT,
+        RIGHT,
+        HALF,
+        NONE
+    }
+
     public delegate void InterfaceImageEventHandler(object sender, EventArgs e);
 
     /// <summary>
@@ -39,6 +54,11 @@ namespace Droid_Image
         public event InterfaceImageEventHandler ImageChanged;
         public event InterfaceImageEventHandler DiaporamaLaunched;
 
+        private bool _altPress;
+        private bool _shiftPress;
+        private bool _ctrlPress;
+        private Mode _currentMode;
+        private Tools4Libraries.Slider.SliderTrackBar _trackBar;
         private static Interface_image _this;
         private ToolStripMenuIMG _tsm;
         private List<String> _listToolStrip;
@@ -64,7 +84,7 @@ namespace Droid_Image
         private bool _flagSelection = false;
         private bool _flagDrawLine = false;
         private bool _flagDrawShape = false;
-        private bool _flagDiaporama = false;
+        private bool _diaporamaRunning = false;
         private bool _mouseDown = false;
         private int _initMouseX = 0;
         private int _initMouseY = 0;
@@ -103,6 +123,11 @@ namespace Droid_Image
         {
             get { return _openned; }
         }
+        public Mode CurrentMode
+        {
+            get { return _currentMode; }
+            set { _currentMode = value; }
+        }
         /// <summary>
         /// Select view mode zoom | stretch | center
         /// </summary>
@@ -140,6 +165,11 @@ namespace Droid_Image
             get { return _buttonValidation; }
             set { _buttonValidation = value; }
         }
+        public bool DiaporamaRunning
+        {
+            get { return _diaporamaRunning; }
+            set { _diaporamaRunning = value; }
+        }
         #endregion
 
         #region Constructor : Destructor
@@ -149,6 +179,7 @@ namespace Droid_Image
         }
         public Interface_image()
         {
+            _currentMode = Mode.VIEW;
             _imageviewmode = "zoom";
             _openned = false;
             _zoomFactor = 1;
@@ -157,9 +188,11 @@ namespace Droid_Image
             _mask = new Bitmap(Properties.Resource.mask);
             BuildToolBar();
             AddImage();
+            LaunchModeView();
         }
         public Interface_image(List<String> lts)
         {
+            _currentMode = Mode.VIEW;
             _imageviewmode = "zoom";
             _openned = false;
             _listToolStrip = lts;
@@ -169,6 +202,7 @@ namespace Droid_Image
             _mask = new Bitmap(Properties.Resource.mask);
             BuildToolBar();
             AddImage();
+            LaunchModeView();
         }
         ~Interface_image()
         {
@@ -262,7 +296,6 @@ namespace Droid_Image
         #endregion
 
         #region Methods Public
-
         public override bool Open(object o)
         {
             if (o != null)
@@ -328,7 +361,7 @@ namespace Droid_Image
         {
 
         }
-        public override void Resize()
+        public new void Resize()
         {
             if (_visibletoolpanel)
             {
@@ -348,11 +381,11 @@ namespace Droid_Image
                 if (_picturebox != null) _picturebox.Refresh();
             }
         }
-        public override void Refresh()
+        public new void Refresh()
         {
             Resize();
         }
-        public override void GlobalAction(object sender, EventArgs e)
+        public new void GlobalAction(object sender, EventArgs e)
         {
             try
             {
@@ -378,12 +411,21 @@ namespace Droid_Image
                 Log.Write("[ CRT : 3711 ] Cannot execute the command." + exp3711.Message);
             }
         }
-        public void GoAction(string action)
+        public override void GoAction(string action)
         {
             if (!string.IsNullOrEmpty(action))
             {
                 switch (action.ToLower())
                 {
+                    case "edition":
+                        LaunchModeEdition();
+                        break;
+                    case "analyse":
+                        LaunchModeAnalyse();
+                        break;
+                    case "view":
+                        LaunchModeView();
+                        break;
                     case "apply mask":
                         LaunchApplyMask();
                         break;
@@ -471,6 +513,9 @@ namespace Droid_Image
                     case "google":
                         LaunchGoogleImg();
                         break;
+                    case "flikr":
+                        LaunchFlikrImg();
+                        break;
                     case "picture analysing":
                         LaunchRecognition();
                         break;
@@ -495,6 +540,12 @@ namespace Droid_Image
                     case "compare":
                         LaunchCompare();
                         break;
+                    case "save":
+                        LaunchSave();
+                        break;
+                    case "save as":
+                        LaunchSaveAs();
+                        break;
                 }
             }
         }
@@ -503,9 +554,58 @@ namespace Droid_Image
             _tsm = new ToolStripMenuIMG(this);
             return _tsm;
         }
-
-        public void BuildPanel()
+        public void ProcessKeyDown(Keys key)
         {
+            if (key == Keys.Alt || key == Keys.Menu) { _altPress = true; }
+            else if (key == Keys.ShiftKey) { _shiftPress = true; }
+            else if (key == Keys.ControlKey) { _ctrlPress = true; }
+            else if (_ctrlPress && _shiftPress && key == Keys.S) { LaunchSaveAs(); }
+            else if (_ctrlPress && key == Keys.S) { LaunchSave(); }
+            else
+            {
+                switch (_currentMode)
+                {
+                    case Mode.EDITION:
+                        break;
+                    case Mode.ANALYSE:
+                        break;
+                    case Mode.VIEW:
+                        if (_altPress && key == Keys.Left) { LaunchRotationL(); }
+                        else if (_altPress && key == Keys.Right) { LaunchRotationR(); }
+                        else if (_altPress && key == Keys.Up) { LaunchCenterImage(); }
+                        else if (_altPress && key == Keys.Down) { LaunchAdjustImage(); }
+                        else if (key == Keys.Left) { LaunchBack(); }
+                        else if (key == Keys.Right) { LaunchNext(); }
+                        break;
+                }
+            }
+        }
+        public void ProcessKeyUp(Keys key)
+        {
+            if (key == Keys.Alt || key == Keys.Menu)
+            {
+                _altPress = false;
+            }
+            else if (key == Keys.Shift)
+            {
+                _shiftPress = false;
+            }
+            else if (key == Keys.Control)
+            {
+                _ctrlPress = false;
+            }
+            else
+            {
+                switch (_currentMode)
+                {
+                    case Mode.EDITION:
+                        break;
+                    case Mode.ANALYSE:
+                        break;
+                    case Mode.VIEW:
+                        break;
+                }
+            }
         }
         #endregion
 
@@ -534,11 +634,26 @@ namespace Droid_Image
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 if (_stream != null) { _stream.Close(); }
-                _stream = File.OpenRead(ofd.FileName);
-                CurrentImage = Bitmap.FromFile(ofd.FileName);
                 PathFile = ofd.FileName;
+                _stream = File.OpenRead(PathFile);
+                CurrentImage = Bitmap.FromFile(PathFile);
             }
             ProcessOpenned();
+        }
+        private void LaunchSaveAs()
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.FileName = PathFile;
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                PathFile = sfd.FileName;
+                _currentImage.Save(PathFile);
+            }
+        }
+        private void LaunchSave()
+        {
+            if (!string.IsNullOrEmpty(PathFile)) { _currentImage.Save(PathFile); }
+            else { LaunchSaveAs(); }
         }
         private void LaunchVisibletoolpanel()
         {
@@ -610,6 +725,7 @@ namespace Droid_Image
                         if (this.PathFile.Contains(fichiers[i]))
                         {
                             index = i;
+                            break;
                         }
                     }
                     index = determinePrevPictureIndex(fichiers, index);
@@ -967,6 +1083,10 @@ namespace Droid_Image
             AddImage();
             _textSearchChanged = false;
         }
+        private void LaunchFlikrImg()
+        {
+            // TODO
+        }
         private void LaunchRecognition()
         {
             _pictureByte = imageToByteArray(_currentImage);
@@ -1048,10 +1168,11 @@ namespace Droid_Image
         }
         private void LaunchDiaporama()
         {
-            _flagDiaporama = !_flagDiaporama;
-            if (_flagDiaporama) { _timer.Start(); }
+            _diaporamaRunning = !_diaporamaRunning;
+            if (_diaporamaRunning) { _timer.Start(); }
             else { _timer.Stop(); }
-            OnDiaporamaLaunched(_flagDiaporama, null);
+            OnDiaporamaLaunched(_diaporamaRunning, null);
+            _tsm.SwitchDiaporama();
         }
         private void LaunchSerializeImage()
         {
@@ -1070,6 +1191,7 @@ namespace Droid_Image
         }
         private void LaunchUnserializeString()
         {
+            PathFile = null;
             if (!string.IsNullOrEmpty(_serialiseString))
             {
                 if (_serialiseString == null)
@@ -1149,6 +1271,33 @@ namespace Droid_Image
                 Log.Write("[ INF : 3712 ] Cannot compare images.\r\nException : " + exp.Message);
             }
             return difference;
+        }
+        private void LaunchModeEdition()
+        {
+            _trackBar.Visible = false;
+            _picturebox.Height = _sheet.Height;
+            _picturebox.Top = 0;
+
+            _currentMode = Mode.EDITION;
+            _tsm.SwitchMode();
+        }
+        private void LaunchModeView()
+        {
+            _trackBar.Visible = true;
+            _picturebox.Height = _sheet.Height - _trackBar.Height;
+            _picturebox.Top = _trackBar.Height;
+
+            _currentMode = Mode.VIEW;
+            _tsm.SwitchMode();
+        }
+        private void LaunchModeAnalyse()
+        {
+            _trackBar.Visible = false;
+            _picturebox.Height = _sheet.Height;
+            _picturebox.Top = 0;
+
+            _currentMode = Mode.ANALYSE;
+            _tsm.SwitchMode();
         }
         #endregion
 
@@ -1242,7 +1391,7 @@ namespace Droid_Image
                 {
                     foreach (string se in ext)
                     {
-                        if (fichiers[curindex].EndsWith(se))
+                        if (fichiers[curindex].ToLower().EndsWith(se))
                         {
                             notfound = false;
                             break;
@@ -1251,6 +1400,24 @@ namespace Droid_Image
                 }
             }
             return curindex;
+        }
+        private Rotation GetPictureOrientation()
+        {
+            string val = string.Empty;
+            if (CurrentImage != null)
+            { 
+                foreach (var prop in CurrentImage.PropertyItems)
+                {
+                    if (prop.Id == 0x112)
+                    {
+                        if (prop.Value[0] == 6) { return Rotation.RIGHT; }
+                        else if (prop.Value[0] == 8) { return Rotation.LEFT; }
+                        else if (prop.Value[0] == 3) { return Rotation.HALF; }
+                        else { return Rotation.NONE; }
+                    }
+                }
+            }
+            return Rotation.NONE;
         }
         private void AddImage()
         {
@@ -1276,7 +1443,18 @@ namespace Droid_Image
             }
 
             _picturebox.Image = CurrentImage;
-            //_tsm.CurrentTabPage.Controls.Add(_sheet);
+            switch (GetPictureOrientation())
+            {
+                case Rotation.LEFT:
+                    LaunchRotationL();
+                    break;
+                case Rotation.RIGHT:
+                    LaunchRotationR();
+                    break;
+                case Rotation.HALF:
+                    LaunchRotate180();
+                    break;
+            }
         }
         private void BuildSheet()
         {
@@ -1298,18 +1476,40 @@ namespace Droid_Image
             {
                 _sheet = new Panel();
                 _sheet.AutoScroll = true;
-                _sheet.BackColor = Color.Orange;
-                _sheet.Dock = DockStyle.Fill;
                 _sheet.BorderStyle = BorderStyle.None;
                 _sheet.AutoScroll = true;
                 _sheet.Controls.Add(_picturebox);
+                _sheet.BackColor = Color.Pink;
+
+                _trackBar = new SliderTrackBar();
+                _trackBar.BackColor = System.Drawing.Color.Transparent;
+                _trackBar.EmptyTrackColor = System.Drawing.Color.Black;
+                _trackBar.AllowUserValueChange = false;
+                _trackBar.AllowMouseWheelChange = false;
+                _trackBar.AllowDrop = false;
+                _trackBar.Height = 5;
+                _trackBar.Width = _sheet.Width + 10;
+                _trackBar.Left = -5;
+                _trackBar.Top = 0;
+                _trackBar.ScaleType = SliderTrackBar.SliderTrackBarScaleType.None;
+                _trackBar.SliderButtonSize = new Size(14, 7);
+                _trackBar.ShowSlider = SliderTrackBar.SliderTrackBarShowSlider.Never;
+                _trackBar.TrackLowerColor = Color.FromName("SaddleBrown");
+                _trackBar.TrackUpperColor = Color.FromName("Orange");
+                _trackBar.UseSeeking = false;
+                _trackBar.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right))));
+                _sheet.Controls.Add(_trackBar);
 
                 _picturebox = new PictureBox();
                 _picturebox.BackColor = Color.DimGray;
                 _picturebox.BorderStyle = BorderStyle.None;
                 _picturebox.SizeMode = PictureBoxSizeMode.Zoom;
                 _picturebox.Image = CurrentImage;
-                _picturebox.Dock = DockStyle.Fill;
+                _picturebox.Top = 0;
+                _picturebox.Left = 0;
+                _picturebox.Width = _sheet.Width;
+                _picturebox.Height = _sheet.Height - _trackBar.Height;
+                _picturebox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right) | System.Windows.Forms.AnchorStyles.Bottom)));
                 _sheet.Controls.Add(_picturebox);
 
                 _buttonValidation = new Button();
@@ -1333,6 +1533,7 @@ namespace Droid_Image
                 _timer.Tick += _timer_Tick;
             }
         }
+
         private void AddToolsPanel()
         {
             //buildpaneltools();
@@ -1524,7 +1725,7 @@ namespace Droid_Image
                 _picturebox.Invalidate();
             }
         }
-
+        
         #region Build ToolPanel
         private void buildpictureboxmini()
         {

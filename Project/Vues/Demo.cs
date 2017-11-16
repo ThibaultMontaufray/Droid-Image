@@ -34,6 +34,9 @@ namespace Droid_Image
             InitRibbon();
             InitInterface();
             InitMessageDisplay();
+
+            this.KeyDown += Demo_KeyDown;
+            this.KeyUp += Demo_KeyUp;
         }
         private void InitInterface()
         {
@@ -42,10 +45,10 @@ namespace Droid_Image
             _intImg.MessageAvailable += _intImg_MessageAvailable;
             _intImg.ImageChanged += _intImg_ImageChanged;
             _intImg.Sheet.Dock = DockStyle.None;
-            _intImg.Sheet.Top = 125;
+            _intImg.Sheet.Top = 126;
             _intImg.Sheet.Left = 0;
             _intImg.Sheet.Width = this.Width - 16;
-            _intImg.Sheet.Height = this.Height - 164;
+            _intImg.Sheet.Height = this.Height - 145;
             _intImg.Sheet.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right) | System.Windows.Forms.AnchorStyles.Bottom)));
             this.Controls.Add(_intImg.Sheet);
             _ribbon.Tabs.Add(_intImg.Tsm);
@@ -124,6 +127,14 @@ namespace Droid_Image
         private void Demo_Resize(object sender, System.EventArgs e)
         {
             //_messageDisplay.Anchor = AnchorStyles.Top & AnchorStyles.Left;
+        }
+        private void Demo_KeyDown(object sender, KeyEventArgs e)
+        {
+            _intImg.ProcessKeyDown(e.KeyCode);
+        }
+        private void Demo_KeyUp(object sender, KeyEventArgs e)
+        {
+            _intImg.ProcessKeyUp(e.KeyCode);
         }
         #endregion
     }

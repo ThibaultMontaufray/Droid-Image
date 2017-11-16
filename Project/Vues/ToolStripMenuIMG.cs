@@ -25,7 +25,7 @@ namespace Droid_Image
 
         private RibbonPanel _panelMain;
         private RibbonPanel _panelNavigation;
-        private RibbonPanel _panelTools;
+        private RibbonPanel _panelView;
         private RibbonPanel _panelParsing;
         private RibbonPanel _panelDrawing;
         private RibbonPanel _panelText;
@@ -38,7 +38,6 @@ namespace Droid_Image
         private RibbonButton _ts_paste;
         private RibbonTextBox _valueLookingFor;
         private RibbonButton _ts_web_research;
-        private RibbonButton _ts_diaporama;
         private RibbonButton _ts_save;
         private RibbonButton _ts_saveas;
         private RibbonButton _ts_fullscreen;
@@ -61,10 +60,6 @@ namespace Droid_Image
         private RibbonButton _ts_imgautosize;
         private RibbonButton _ts_imgzoom;
         private RibbonUpDown _ts_zoom;
-
-        private RibbonButton _ts_toolpanelvisible;
-        private RibbonButton _ts_back;
-        private RibbonButton _ts_next;
 
         private RibbonButton _ts_tool_adjust;
         private RibbonButton _ts_tool_rgb;
@@ -104,6 +99,17 @@ namespace Droid_Image
 
         private RibbonButton _ts_web_google;
         private RibbonButton _ts_web_flikr;
+        
+        private RibbonPanel _panelMode;
+        private RibbonButton _modeView;
+        private RibbonButton _modeEdition;
+        private RibbonButton _modeAnalyse;
+
+        //private RibbonPanel _panelNavigation;
+        private RibbonButton _ts_diaporama;
+        private RibbonButton _ts_toolpanelvisible;
+        private RibbonButton _ts_back;
+        private RibbonButton _ts_next;
 
         private bool _visibletoolpanel;
         public static float _rotationvalue;
@@ -113,8 +119,8 @@ namespace Droid_Image
         #region Properties
         public RibbonPanel PanelTools
         {
-            get { return _panelTools; }
-            set { _panelTools = value; }
+            get { return _panelView; }
+            set { _panelView = value; }
         }
         public Panel CurrentTabPage
         {
@@ -140,12 +146,15 @@ namespace Droid_Image
             BuildToolsText();
 
             BuildPanelMain();
+            BuildPanelView();
+            BuildPanelMode();
+            BuildPanelNavigation();
             BuildPanelDrawing();
-            BuildPanelTools();
             BuildPanelText();
             BuildPanelParsing();
             //BuildPanelNavigation();
-            
+
+            SwitchMode();
             this.Text = "Pictures";
         }
         #endregion
@@ -154,7 +163,7 @@ namespace Droid_Image
         public void EnableAll()
         {
             _panelMain.Enabled = true;
-            _panelTools.Enabled = true;
+            _panelView.Enabled = true;
             //_panelNavigation.Enabled = true;
             _panelParsing.Enabled = true;
             _panelDrawing.Enabled = true;
@@ -175,7 +184,7 @@ namespace Droid_Image
         public void DisableAll()
         {
             _panelMain.Enabled = false;
-            _panelTools.Enabled = false;
+            _panelView.Enabled = false;
             //_panelNavigation.Enabled = false;
             _panelParsing.Enabled = false;
             _panelDrawing.Enabled = false;
@@ -203,6 +212,55 @@ namespace Droid_Image
             //RibbonTabMenu.Dispose();
             theList.Remove("manager_img_" + _currentTabPage.Text);
         }
+        public void SwitchMode()
+        {
+            _modeView.Image = Tools4Libraries.Resources.ResourceIconSet32Default.shape_square;
+            _modeView.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.shape_square;
+            _modeEdition.Image = Tools4Libraries.Resources.ResourceIconSet32Default.shape_square;
+            _modeEdition.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.shape_square;
+            _modeAnalyse.Image = Tools4Libraries.Resources.ResourceIconSet32Default.shape_square;
+            _modeAnalyse.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.shape_square;
+
+            if (_intImg != null)
+            { 
+                switch (_intImg.CurrentMode)
+                {
+                    case Mode.EDITION:
+                        _panelDrawing.Visible = true;
+                        _panelNavigation.Visible = false;
+                        _panelParsing.Visible = false;
+                        _panelText.Visible = true;
+                        _modeEdition.Image = Tools4Libraries.Resources.ResourceIconSet32Default.check_box;
+                        _modeEdition.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.check_box;
+                        break;
+                    case Mode.ANALYSE:
+                        _panelDrawing.Visible = false;
+                        _panelNavigation.Visible = false;
+                        _panelParsing.Visible = true;
+                        _panelText.Visible = false;
+                        _modeAnalyse.Image = Tools4Libraries.Resources.ResourceIconSet32Default.check_box;
+                        _modeAnalyse.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.check_box;
+                        break;
+                    case Mode.VIEW:
+                    default:
+                        _panelDrawing.Visible = false;
+                        _panelNavigation.Visible = true;
+                        _panelParsing.Visible = false;
+                        _panelText.Visible = false;
+                        _modeView.Image = Tools4Libraries.Resources.ResourceIconSet32Default.check_box;
+                        _modeView.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.check_box;
+                        break;
+                }
+            }
+        }
+        public void SwitchDiaporama()
+        {
+            if (_intImg != null)
+            {
+                _ts_diaporama.Image = _intImg.DiaporamaRunning ? Tools4Libraries.Resources.ResourceIconSet32Default.control_pause : Tools4Libraries.Resources.ResourceIconSet32Default.control_play;
+                _ts_diaporama.SmallImage = _intImg.DiaporamaRunning ? Tools4Libraries.Resources.ResourceIconSet16Default.control_pause : Tools4Libraries.Resources.ResourceIconSet16Default.control_play;
+            }
+        }
         #endregion
 
         #region Methods private
@@ -215,56 +273,6 @@ namespace Droid_Image
             _ts_main_open.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.open_folder;
             _ts_main_open.MinSizeMode = RibbonElementSizeMode.Large;
 
-            _ts_undo = new RibbonButton("Undo");
-            _ts_undo.ToolTip = "Undo";
-            _ts_undo.Click += new EventHandler(tsb_Click);
-            _ts_undo.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.arrow_undo;
-            _ts_undo.MinSizeMode = RibbonElementSizeMode.Compact;
-
-            _ts_redo = new RibbonButton("Redo");
-            _ts_redo.ToolTip = "Redo";
-            _ts_redo.Click += new EventHandler(tsb_Click);
-            _ts_redo.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.arrow_redo;
-            _ts_redo.MinSizeMode = RibbonElementSizeMode.Compact;
-
-            _ts_copy = new RibbonButton("Copy");
-            _ts_copy.ToolTip = "Copy";
-            _ts_copy.Click += new EventHandler(tsb_Click);
-            _ts_copy.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.page_copy;
-            _ts_copy.MinSizeMode = RibbonElementSizeMode.Compact;
-
-            _ts_cut = new RibbonButton("Cut");
-            _ts_cut.ToolTip = "Cut";
-            _ts_cut.Click += new EventHandler(tsb_Click);
-            _ts_cut.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.cut;
-            _ts_cut.MinSizeMode = RibbonElementSizeMode.Compact;
-
-            _ts_paste = new RibbonButton("Paste");
-            _ts_paste.ToolTip = "Paste";
-            _ts_paste.Click += new EventHandler(tsb_Click);
-            _ts_paste.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.paste_plain;
-            _ts_paste.MinSizeMode = RibbonElementSizeMode.Compact;
-
-            _ts_back = new RibbonButton("Back");
-            _ts_back.ToolTip = "Back";
-            _ts_back.Click += new EventHandler(tsb_Click);
-            _ts_back.Image = Tools4Libraries.Resources.ResourceIconSet32Default.document_back;
-            _ts_back.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.document_back;
-            _ts_back.MinSizeMode = RibbonElementSizeMode.Compact;
-
-            _ts_next = new RibbonButton("Next");
-            _ts_next.ToolTip = "Next";
-            _ts_next.Click += new EventHandler(tsb_Click);
-            _ts_next.Image = Tools4Libraries.Resources.ResourceIconSet32Default.document_next;
-            _ts_next.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.document_next;
-            _ts_next.MinSizeMode = RibbonElementSizeMode.Compact;
-
-            _ts_diaporama = new RibbonButton("Diaporama");
-            _ts_diaporama.ToolTip = "Diaporama";
-            _ts_diaporama.Click += new EventHandler(tsb_Click);
-            _ts_diaporama.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.control_play;
-            _ts_diaporama.MinSizeMode = RibbonElementSizeMode.Compact;
-
             _ts_save = new RibbonButton("Save");
             _ts_save.ToolTip = "Save";
             _ts_save.Click += new EventHandler(tsb_Click);
@@ -276,12 +284,6 @@ namespace Droid_Image
             _ts_saveas.Click += new EventHandler(tsb_Click);
             _ts_saveas.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.save_as;
             _ts_saveas.MinSizeMode = RibbonElementSizeMode.Compact;
-
-            _ts_fullscreen = new RibbonButton("Full screen");
-            _ts_fullscreen.ToolTip = "Full screen";
-            _ts_fullscreen.Click += new EventHandler(tsb_Click);
-            _ts_fullscreen.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.monitor;
-            _ts_fullscreen.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_zoomin = new RibbonButton("Zoom in");
             _ts_zoomin.ToolTip = "Zoom in";
@@ -302,22 +304,12 @@ namespace Droid_Image
             _ts_delete.MinSizeMode = RibbonElementSizeMode.Compact;
             
             RibbonItemGroup rig1 = new RibbonItemGroup();
-            rig1.Items.Add(_ts_copy);
-            rig1.Items.Add(_ts_cut);
-            rig1.Items.Add(_ts_paste);
-            rig1.Items.Add(_ts_undo);
-            rig1.Items.Add(_ts_redo);
             rig1.Items.Add(_ts_save);
             rig1.Items.Add(_ts_saveas);
 
             RibbonItemGroup rig2 = new RibbonItemGroup();
-            rig2.Items.Add(_ts_back);
-            rig2.Items.Add(_ts_delete);
-            rig2.Items.Add(_ts_fullscreen);
-            rig2.Items.Add(_ts_diaporama);
             rig2.Items.Add(_ts_zoomin);
             rig2.Items.Add(_ts_zoomout);
-            rig2.Items.Add(_ts_next);
             
             RibbonItemGroup rig3 = new RibbonItemGroup();
             rig3.Items.Add(_valueLookingFor);
@@ -332,32 +324,87 @@ namespace Droid_Image
             _panelMain.Items.Add(rig3);
             this.Panels.Add(_panelMain);
         }        
+        private void BuildPanelMode()
+        {
+            _modeView = new RibbonButton();
+            _modeView.Name = "View";
+            _modeView.Text = _modeView.Name;
+            _modeView.Click += new EventHandler(tsb_Click);
+            _modeView.Image = Tools4Libraries.Resources.ResourceIconSet32Default.check_box;
+            _modeView.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.check_box;
+            _modeView.MinSizeMode = RibbonElementSizeMode.Medium;
+            _modeView.MaxSizeMode = RibbonElementSizeMode.Medium;
+
+            _modeEdition = new RibbonButton();
+            _modeEdition.Name = "Edition";
+            _modeEdition.Text = _modeEdition.Name;
+            _modeEdition.Click += new EventHandler(tsb_Click);
+            _modeEdition.Image = Tools4Libraries.Resources.ResourceIconSet32Default.shape_square;
+            _modeEdition.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.shape_square;
+            _modeEdition.MinSizeMode = RibbonElementSizeMode.Medium;
+            _modeEdition.MaxSizeMode = RibbonElementSizeMode.Medium;
+
+            _modeAnalyse = new RibbonButton();
+            _modeAnalyse.Name = "Analyse";
+            _modeAnalyse.Text = _modeAnalyse.Name;
+            _modeAnalyse.Click += new EventHandler(tsb_Click);
+            _modeAnalyse.Image = Tools4Libraries.Resources.ResourceIconSet32Default.shape_square;
+            _modeAnalyse.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.shape_square;
+            _modeAnalyse.MinSizeMode = RibbonElementSizeMode.Medium;
+            _modeAnalyse.MaxSizeMode = RibbonElementSizeMode.Medium;
+
+            _panelMode = new System.Windows.Forms.RibbonPanel("Mode");
+            _panelMode.Image = Tools4Libraries.Resources.ResourceIconSet16Default.pictures;
+            _panelMode.Items.Add(_modeView);
+            _panelMode.Items.Add(_modeEdition);
+            _panelMode.Items.Add(_modeAnalyse);
+            this.Panels.Add(_panelMode);
+        }
         private void BuildPanelNavigation()
         {
+            _ts_fullscreen = new RibbonButton("Full screen");
+            _ts_fullscreen.ToolTip = "Full screen";
+            _ts_fullscreen.Click += new EventHandler(tsb_Click);
+            _ts_fullscreen.Image = Tools4Libraries.Resources.ResourceIconSet32Default.monitor;
+            _ts_fullscreen.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.monitor;
+            _ts_fullscreen.MinSizeMode = RibbonElementSizeMode.Medium;
+
+            _ts_diaporama = new RibbonButton("Diaporama");
+            _ts_diaporama.ToolTip = "Diaporama";
+            _ts_diaporama.Click += new EventHandler(tsb_Click);
+            _ts_diaporama.Image = Tools4Libraries.Resources.ResourceIconSet32Default.control_play;
+            _ts_diaporama.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.control_play;
+            _ts_diaporama.MinSizeMode = RibbonElementSizeMode.Medium;
+
             _ts_toolpanelvisible = new RibbonButton("Visible");
             _ts_toolpanelvisible.Click += new EventHandler(tsb_Click);
             _ts_toolpanelvisible.Image = Tools4Libraries.Resources.ResourceIconSet32Default.setting_tools;
             _ts_toolpanelvisible.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.setting_tools;
+            _ts_toolpanelvisible.MinSizeMode = RibbonElementSizeMode.Medium;
 
             _ts_back = new RibbonButton("Back");
             _ts_back.Click += new EventHandler(tsb_Click);
             _ts_back.Image = Tools4Libraries.Resources.ResourceIconSet32Default.document_back;
             _ts_back.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.document_back;
+            _ts_back.MinSizeMode = RibbonElementSizeMode.Large;
 
             _ts_next = new RibbonButton("Next");
             _ts_next.Click += new EventHandler(tsb_Click);
             _ts_next.Image = Tools4Libraries.Resources.ResourceIconSet32Default.document_next;
             _ts_next.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.document_next;
+            _ts_next.MinSizeMode = RibbonElementSizeMode.Large;
 
             _panelNavigation = new System.Windows.Forms.RibbonPanel();
             _panelNavigation.Image = Tools4Libraries.Resources.ResourceIconSet16Default.node_tree;
             _panelNavigation.Text = "Navigation";
-            _panelNavigation.Items.Add(_ts_toolpanelvisible);
             _panelNavigation.Items.Add(_ts_back);
             _panelNavigation.Items.Add(_ts_next);
+            _panelNavigation.Items.Add(_ts_diaporama);
+            _panelNavigation.Items.Add(_ts_toolpanelvisible);
+            _panelNavigation.Items.Add(_ts_fullscreen);
             this.Panels.Add(_panelNavigation);
         }
-        private void BuildPanelTools()
+        private void BuildPanelView()
         {          
             _ts_tool_addImage = new RibbonButton("Insert image");
             _ts_tool_addImage.Click += new EventHandler(tsb_Click);
@@ -392,16 +439,16 @@ namespace Droid_Image
             itemBlue.Click += tsb_Click;
             _ts_tool_rgb.DropDownItems.Add(itemBlue);
 
-            _panelTools = new System.Windows.Forms.RibbonPanel("Tools");
-            _panelTools.Image = Tools4Libraries.Resources.ResourceIconSet16Default.image_edit;
-            _panelTools.Items.Add(_ts_tool_adjust);
-            _panelTools.Items.Add(_ts_size);
-            _panelTools.Items.Add(_ts_rotations);
+            _panelView = new System.Windows.Forms.RibbonPanel("Tools");
+            _panelView.Image = Tools4Libraries.Resources.ResourceIconSet16Default.image_edit;
+            _panelView.Items.Add(_ts_tool_adjust);
+            _panelView.Items.Add(_ts_size);
+            _panelView.Items.Add(_ts_rotations);
             //_panelTools.Items.Add(_ts_labelrotation);
             //_panelTools.Items.Add(_ts_valuerotation);
             //_panelTools.Items.Add(_ts_rotation);
             //_panelTools.Items.Add(_ts_tool_addImage);
-            this.Panels.Add(_panelTools);
+            this.Panels.Add(_panelView);
         }
         private void BuildPanelParsing()
         {
@@ -409,25 +456,25 @@ namespace Droid_Image
             _ts_code_qr.Click += new EventHandler(tsb_Click);
             _ts_code_qr.Image = Tools4Libraries.Resources.ResourceIconSet32Default.qrcode;
             _ts_code_qr.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.qrcode;
-            //_ts_code_qr.MaxSizeMode = RibbonElementSizeMode.Medium;
+            _ts_code_qr.MinSizeMode = RibbonElementSizeMode.Medium;
 
             _ts_code_barre = new RibbonButton("Code Barres");
             _ts_code_barre.Click += new EventHandler(tsb_Click);
             _ts_code_barre.Image = Tools4Libraries.Resources.ResourceIconSet32Default.barcode;
             _ts_code_barre.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.barcode;
-            //_ts_code_barre.MaxSizeMode = RibbonElementSizeMode.Medium;
+            _ts_code_barre.MinSizeMode = RibbonElementSizeMode.Medium;
 
-            _ts_recognition = new RibbonButton("Picture analysing");
+            _ts_recognition = new RibbonButton("Global analysing");
             _ts_recognition.Click += new EventHandler(tsb_Click);
             _ts_recognition.Image = Tools4Libraries.Resources.ResourceIconSet32Default.brain_trainer;
             _ts_recognition.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.brain_trainer;
-            //_ts_recognition.MaxSizeMode = RibbonElementSizeMode.Medium;
+            _ts_recognition.MinSizeMode = RibbonElementSizeMode.Medium;
 
             _ts_compare = new RibbonButton("Compare");
             _ts_compare.Click += new EventHandler(tsb_Click);
             _ts_compare.Image = Tools4Libraries.Resources.ResourceIconSet32Default.picture_frame;
             _ts_compare.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.picture_frame;
-            //_ts_recognition.MaxSizeMode = RibbonElementSizeMode.Medium;
+            _ts_recognition.MinSizeMode = RibbonElementSizeMode.Medium;
 
             _panelParsing = new System.Windows.Forms.RibbonPanel("Parsing");
             _panelParsing.Image = Tools4Libraries.Resources.ResourceIconSet16Default.scanner;
@@ -439,6 +486,36 @@ namespace Droid_Image
         }
         private void BuildPanelDrawing()
         {
+            _ts_undo = new RibbonButton("Undo");
+            _ts_undo.ToolTip = "Undo";
+            _ts_undo.Click += new EventHandler(tsb_Click);
+            _ts_undo.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.arrow_undo;
+            _ts_undo.MinSizeMode = RibbonElementSizeMode.Compact;
+
+            _ts_redo = new RibbonButton("Redo");
+            _ts_redo.ToolTip = "Redo";
+            _ts_redo.Click += new EventHandler(tsb_Click);
+            _ts_redo.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.arrow_redo;
+            _ts_redo.MinSizeMode = RibbonElementSizeMode.Compact;
+
+            _ts_copy = new RibbonButton("Copy");
+            _ts_copy.ToolTip = "Copy";
+            _ts_copy.Click += new EventHandler(tsb_Click);
+            _ts_copy.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.page_copy;
+            _ts_copy.MinSizeMode = RibbonElementSizeMode.Compact;
+
+            _ts_cut = new RibbonButton("Cut");
+            _ts_cut.ToolTip = "Cut";
+            _ts_cut.Click += new EventHandler(tsb_Click);
+            _ts_cut.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.cut;
+            _ts_cut.MinSizeMode = RibbonElementSizeMode.Compact;
+
+            _ts_paste = new RibbonButton("Paste");
+            _ts_paste.ToolTip = "Paste";
+            _ts_paste.Click += new EventHandler(tsb_Click);
+            _ts_paste.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.paste_plain;
+            _ts_paste.MinSizeMode = RibbonElementSizeMode.Compact;
+
             RibbonItemGroup rig1 = new RibbonItemGroup();
             rig1.Items.Add(_ts_draw_pencil);
             rig1.Items.Add(_ts_draw_paintbrush);
@@ -455,10 +532,18 @@ namespace Droid_Image
             rig2.Items.Add(_ts_draw_select);
             rig2.Items.Add(_ts_draw_move);
 
+            RibbonItemGroup rig3 = new RibbonItemGroup();
+            rig3.Items.Add(_ts_undo);
+            rig3.Items.Add(_ts_redo);
+            rig3.Items.Add(_ts_copy);
+            rig3.Items.Add(_ts_cut);
+            rig3.Items.Add(_ts_paste);
+
             _panelDrawing = new System.Windows.Forms.RibbonPanel("Drawing");
             _panelDrawing.Image = Tools4Libraries.Resources.ResourceIconSet16Default.drawer;
             _panelDrawing.Items.Add(rig1);
             _panelDrawing.Items.Add(rig2);
+            _panelDrawing.Items.Add(rig3);
             this.Panels.Add(_panelDrawing);
         }
         private void BuildPanelText()
