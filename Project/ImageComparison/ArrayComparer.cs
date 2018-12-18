@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Droid_Image.ImageComparison
+namespace Droid.Image.Comparison
 {
     /// <summary>
     /// Helperclass for comparing arrays of equal length containing comparable items

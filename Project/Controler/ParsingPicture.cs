@@ -7,7 +7,7 @@ using System.Reflection;
 using System.IO;
 using OpenCvSharp.CPlusPlus;
 
-namespace Droid_Image
+namespace Droid.Image
 {
     public static class ParsingPicture
     {
@@ -99,11 +99,11 @@ namespace Droid_Image
             List<DetectZone> zones = new List<DetectZone>();
             
             Assembly assembly = Assembly.GetExecutingAssembly();
-            Stream objStream = assembly.GetManifestResourceStream(string.Format("Droid_Image.Resources.XML_Recognition.{0}.xml", objectName));
+            Stream objStream = assembly.GetManifestResourceStream(string.Format("Droid.Image.Resources.XML_Recognition.{0}.xml", objectName));
             StreamReader objReader = new StreamReader(objStream);
             string recognigionFileData = objReader.ReadToEnd();
 
-            string workingFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Servodroid\Droid-Image";
+            string workingFolder = Interface_image.WORKINGDIRECTORY;
             if (!Directory.Exists(workingFolder)) { Directory.CreateDirectory(workingFolder); }
             if (!Directory.Exists(Path.Combine(workingFolder, "XML_Recognition"))) { Directory.CreateDirectory(Path.Combine(workingFolder, "XML_Recognition")); }
             

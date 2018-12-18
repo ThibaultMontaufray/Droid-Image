@@ -9,7 +9,7 @@
 
 using System.Windows.Forms;
 
-namespace Droid_Image
+namespace Droid.Image
 {
 	/// <summary>
 	/// Description of GUI.

@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace Droid_Image
+namespace Droid.Image
 {
     public partial class MessageDisplay : UserControl
     {

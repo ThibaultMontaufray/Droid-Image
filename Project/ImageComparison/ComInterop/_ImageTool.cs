@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Droid_Image.ImageComparison
+namespace Droid.Image.Comparison
 {
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
     [Guid("57b01751-f9f0-40b2-b252-947546c52456")]

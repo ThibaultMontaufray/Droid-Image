@@ -4,7 +4,7 @@ using System.Text;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace Droid_Image
+namespace Droid.Image
 {
     public class ImageHandler
     {

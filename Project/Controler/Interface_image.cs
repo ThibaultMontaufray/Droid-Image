@@ -22,10 +22,15 @@ using System.Collections;
 using com.google.zxing;
 using com.google.zxing.common;
 using System.Threading.Tasks;
+using Tools.Slider;
+using System.Runtime.InteropServices;
+using PdfConverter.Converters;
+using PdfSharp.Pdf;
+using PdfSharp.Drawing;
+using System.Diagnostics;
 using Droid_Image.ImageComparison;
-using Tools4Libraries.Slider;
 
-namespace Droid_Image
+namespace Droid.Image
 {
     public enum Mode
     {
@@ -49,6 +54,7 @@ namespace Droid_Image
 	public class Interface_image : GPInterface
     {
         #region Attributes
+        public static string WORKINGDIRECTORY = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Servodroid\Droid-Image";
         public static Color THEME_COLOR = Color.DarkOrange;
         public event InterfaceImageEventHandler MessageAvailable;
         public event InterfaceImageEventHandler ImageChanged;
@@ -58,26 +64,25 @@ namespace Droid_Image
         private bool _shiftPress;
         private bool _ctrlPress;
         private Mode _currentMode;
-        private Tools4Libraries.Slider.SliderTrackBar _trackBar;
+        private Tools.Slider.SliderTrackBar _trackBar;
         private static Interface_image _this;
-        private ToolStripMenuIMG _tsm;
+        private new ToolStripMenuIMG _tsm;
         private List<String> _listToolStrip;
         private PictureBox _picturebox;
         private Button _buttonValidation;
         //private PictureBox pictureboxmini;
-        private Panel _sheet;
         private Panel _panelTools;
         private Panel _panelSelection;
         private TrackBar _trackbar;
         private Label _tracklabel;
         private Stream _stream;
-        private Image _currentImage;
-        private Image _comparisonImage;
+        private System.Drawing.Image _currentImage;
+        private System.Drawing.Image _comparisonImage;
         private bool _openned;
         private bool _visibletoolpanel;
         private double _zoomFactor;
         private Color _backColor;
-        private Image _originalImage;
+        private System.Drawing.Image _originalImage;
         private string _imageviewmode;
         private ImageHandler _handler;
         private bool _flagCrop = false;
@@ -109,11 +114,6 @@ namespace Droid_Image
             get { return _mask; }
             set { _mask = value; }
         }
-        public Panel Sheet
-        {
-            get { return _sheet; }
-            set { _sheet = value; }
-        }
         public ToolStripMenuIMG Tsm
         {
             get { return _tsm; }
@@ -144,9 +144,9 @@ namespace Droid_Image
         public string TextSearch
         {
             get { return _textSearch; }
-            set { _textSearch = value; }
+            set { _textSearch = value; _textSearchChanged = true; }
         }
-        public Image CurrentImage
+        public System.Drawing.Image CurrentImage
         {
             get { return _currentImage; }
             set
@@ -155,7 +155,7 @@ namespace Droid_Image
                 if (ImageChanged != null) { ImageChanged(null, null); }
             }
         }
-        public Image ComparisonImage
+        public System.Drawing.Image ComparisonImage
         {
             get { return _comparisonImage; }
             set { _comparisonImage = value; }
@@ -212,7 +212,7 @@ namespace Droid_Image
 
         #region Action
         [Description("french[prendre.image(nom)];english[take.picture(name)]")]
-        public static Image ACTION_130_take_picture(string objet)
+        public static System.Drawing.Image ACTION_130_take_picture(string objet)
         {
             string html = GetHtmlCode(objet);
             List<string> urls = GetUrls(html);
@@ -225,7 +225,7 @@ namespace Droid_Image
             byte[] image = GetImage(luckyUrl);
             using (var ms = new MemoryStream(image))
             {
-                return Image.FromStream(ms);
+                return System.Drawing.Image.FromStream(ms);
                 //Form f = new Form();
                 //f.Size = new Size(200, 200);
                 //f.FormBorderStyle = FormBorderStyle.FixedToolWindow;
@@ -236,50 +236,79 @@ namespace Droid_Image
             }
         }
         [Description("french[rogner.image(image,largeur,hauteur,haut,bas)];english[crop.picture(picture,width,height,top,left)]")]
-        public static Image ACTION_131_crop_picture(Image picture, int width, int height, int top, int left)
+        public static System.Drawing.Image ACTION_131_crop_picture(System.Drawing.Image picture, int width, int height, int top, int left)
         {
             return cropImage(picture, new Rectangle(left, top, width, height));
         }
         [Description("french[redimentionner.image(image,largeur,hauteur)];english[resize.picture(picture,width,height)]")]
-        public static Image ACTION_132_resize_picture(Image picture, int width, int height)
+        public static System.Drawing.Image ACTION_132_resize_picture(System.Drawing.Image picture, int width, int height)
         {
             return resizeImage(picture, new Size(width, height));
         }
         [Description("french[tourner.vertical(image)];english[flip.vertical(picture)]")]
-        public static Image ACTION_133_flip_vertical(Image picture)
+        public static System.Drawing.Image ACTION_133_flip_vertical(System.Drawing.Image picture)
         {
             picture.RotateFlip(RotateFlipType.Rotate180FlipY);
             return picture;
         }
         [Description("french[tourner.horisontal(image)];english[flip.horizontal(picture)]")]
-        public static Image ACTION_134_flip_horizontal(Image picture)
+        public static System.Drawing.Image ACTION_134_flip_horizontal(System.Drawing.Image picture)
         {
             picture.RotateFlip(RotateFlipType.Rotate180FlipX);
             return picture;
         }
         [Description("french[chercher.internet(image.nom)];english[research.web(picture.name)]")]
-        public static Image ACTION_135_research_web(string pictureName)
+        public static System.Drawing.Image ACTION_135_research_web(string pictureName)
         {
+            string fileName = Path.Combine(WORKINGDIRECTORY, pictureName.Replace(' ', '_'));
+            if (File.Exists(fileName))
+            {
+                System.Drawing.Image img = System.Drawing.Image.FromFile(Path.Combine(WORKINGDIRECTORY, pictureName));
+                return img;
+            }
             _this.TextSearch = pictureName;
-            _this.LaunchGoogleImg();
+            _this.LaunchGoogleImg(count: 1);
+            _this._picturebox.Image?.Save(fileName);
             return _this._picturebox.Image;
         }
+        [Description("french[chercher.internet(icon.nom)];english[research.web(icon.name)]")]
+        public static System.Drawing.Image ACTION_135_research_icon(string iconName)
+        {
+            try
+            {
+                string fileName = Path.Combine(WORKINGDIRECTORY, "icon_" + iconName.Replace(' ', '_'));
+                if (File.Exists(fileName))
+                {
+                    System.Drawing.Image img = System.Drawing.Image.FromFile(fileName);
+                    return img;
+                }
+                _this.TextSearch = iconName;
+                _this.LaunchGoogleImg(count: 1, icon: true);
+                _this._picturebox.Image?.Save(fileName);
+                return _this._picturebox.Image;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error in lib Images : " + e.Message);
+                return null;
+            }
+        }
         [Description("french[serialiser.image(image)];english[serialize.image(picture)]")]
-        public static string ACTION_136_serialize_image(Image image)
+        public static string ACTION_136_serialize_image(System.Drawing.Image image)
         {
             _this.CurrentImage = image;
             _this.LaunchSerializeImage();
             return _this._serialiseString;
         }
         [Description("french[deserialiser.image(string)];english[unserialize.image(string)]")]
-        public static Image ACTION_137_unserialize_image(string serialise)
+        public static System.Drawing.Image ACTION_137_unserialize_image(string serialise)
         {
             _this._serialiseString = serialise;
             _this.LaunchUnserializeString();
             return _this._currentImage;
         }
         [Description("french[appliquer.masque(image,masque)];english[apply.mask(image,mask)]")]
-        public static Image ACTION_138_apply_mask(Image image, Image mask = null)
+        public static System.Drawing.Image ACTION_138_apply_mask(System.Drawing.Image image, System.Drawing.Image mask = null)
         {
             _this.CurrentImage = image;
             if (mask != null) _this.Mask = new Bitmap(mask);
@@ -287,11 +316,44 @@ namespace Droid_Image
             return _this._currentImage;
         }
         [Description("french[comparer.image(première_image,seconde_image)];english[compare.image(first_image,second_image)]")]
-        public static int ACTION_139_compare(Image first_image, Image second_image)
+        public static int ACTION_139_compare(System.Drawing.Image first_image, System.Drawing.Image second_image)
         {
             _this.CurrentImage = first_image;
             _this.ComparisonImage = second_image;
             return _this.LaunchCompare();
+        }
+        [Description("french[convertir.pdf(fichier)];english[convert.pdf(file)]")]
+        public static void ACTION_140_convert(string path)
+        {
+            FileInfo fi = new FileInfo(path);
+            string file = fi.Directory + "\\" + fi.Name.Replace(fi.Extension, string.Empty) + ".pdf";
+            PdfDocument document = new PdfDocument();
+
+            PdfPage page = document.AddPage();
+            XGraphics gfx = XGraphics.FromPdfPage(page);
+            
+            gfx.DrawImage(XImage.FromFile(path), 0, 0, page.Width, page.Height);
+            document.Save(file);
+        }
+        [Description("french[télécharger.image(url)];english[download.image(url)]")]
+        public static System.Drawing.Image ACTION_141_download_image(string url)
+        {
+            try
+            {
+                System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(url);
+                webRequest.AllowWriteStreamBuffering = true;
+                webRequest.Timeout = 30000;
+                System.Net.WebResponse webResponse = webRequest.GetResponse();
+                System.IO.Stream stream = webResponse.GetResponseStream();
+                System.Drawing.Image image = System.Drawing.Image.FromStream(stream);
+                webResponse.Close();
+                return image;
+            }
+            catch (Exception exp)
+            {
+                Console.WriteLine(exp.Message);
+                return null;
+            }
         }
         #endregion
 
@@ -607,6 +669,322 @@ namespace Droid_Image
                 }
             }
         }
+
+        public static Color ChangeColorBrightness(Color color, float correctionFactor)
+        {
+            float red = (float)color.R;
+            float green = (float)color.G;
+            float blue = (float)color.B;
+
+            if (correctionFactor < 0)
+            {
+                correctionFactor = 1 + correctionFactor;
+                red *= correctionFactor;
+                green *= correctionFactor;
+                blue *= correctionFactor;
+            }
+            else
+            {
+                red = (255 - red) * correctionFactor + red;
+                green = (255 - green) * correctionFactor + green;
+                blue = (255 - blue) * correctionFactor + blue;
+            }
+
+            return Color.FromArgb(color.A, (int)red, (int)green, (int)blue);
+        }
+        public static System.Drawing.Image Brightness(System.Drawing.Image img, float correctionFactor)
+        {
+            float FinalValue = (float)correctionFactor / 255.0f;
+            ColorMatrix TempMatrix = new ColorMatrix();
+            TempMatrix.Matrix = new float[][]{
+                 new float[] {1, 0, 0, 0, 0},
+                 new float[] {0, 1, 0, 0, 0},
+                 new float[] {0, 0, 1, 0, 0},
+                 new float[] {0, 0, 0, 1, 0},
+                 new float[] {FinalValue, FinalValue, FinalValue, 1, 1}
+             };
+            return TempMatrix.Apply(img);
+        }
+        public static System.Drawing.Image ConvertSepiaTone(System.Drawing.Image img)
+        {
+            ColorMatrix TempMatrix = new ColorMatrix();
+            TempMatrix.Matrix = new float[][]{
+                    new float[] {.393f, .349f, .272f, 0, 0},
+                    new float[] {.769f, .686f, .534f, 0, 0},
+                    new float[] {.189f, .168f, .131f, 0, 0},
+                    new float[] {0, 0, 0, 1, 0},
+                    new float[] {0, 0, 0, 0, 1}
+                };
+            return TempMatrix.Apply(img);
+        }
+        public static System.Drawing.Image KuwaharaBlur(System.Drawing.Image img, int Size)
+        {
+            System.Drawing.Bitmap TempBitmap = new Bitmap(img);
+            System.Drawing.Bitmap NewBitmap = new System.Drawing.Bitmap(TempBitmap.Width, TempBitmap.Height);
+            System.Drawing.Graphics NewGraphics = System.Drawing.Graphics.FromImage(NewBitmap);
+            NewGraphics.DrawImage(TempBitmap, new System.Drawing.Rectangle(0, 0, TempBitmap.Width, TempBitmap.Height), new System.Drawing.Rectangle(0, 0, TempBitmap.Width, TempBitmap.Height), System.Drawing.GraphicsUnit.Pixel);
+            NewGraphics.Dispose();
+            Random TempRandom = new Random();
+            int[] ApetureMinX = { -(Size / 2), 0, -(Size / 2), 0 };
+            int[] ApetureMaxX = { 0, (Size / 2), 0, (Size / 2) };
+            int[] ApetureMinY = { -(Size / 2), -(Size / 2), 0, 0 };
+            int[] ApetureMaxY = { 0, 0, (Size / 2), (Size / 2) };
+            for (int x = 0; x < NewBitmap.Width; ++x)
+            {
+                for (int y = 0; y < NewBitmap.Height; ++y)
+                {
+                    int[] RValues = { 0, 0, 0, 0 };
+                    int[] GValues = { 0, 0, 0, 0 };
+                    int[] BValues = { 0, 0, 0, 0 };
+                    int[] NumPixels = { 0, 0, 0, 0 };
+                    int[] MaxRValue = { 0, 0, 0, 0 };
+                    int[] MaxGValue = { 0, 0, 0, 0 };
+                    int[] MaxBValue = { 0, 0, 0, 0 };
+                    int[] MinRValue = { 255, 255, 255, 255 };
+                    int[] MinGValue = { 255, 255, 255, 255 };
+                    int[] MinBValue = { 255, 255, 255, 255 };
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        for (int x2 = ApetureMinX[i]; x2 < ApetureMaxX[i]; ++x2)
+                        {
+                            int TempX = x + x2;
+                            if (TempX >= 0 && TempX < NewBitmap.Width)
+                            {
+                                for (int y2 = ApetureMinY[i]; y2 < ApetureMaxY[i]; ++y2)
+                                {
+                                    int TempY = y + y2;
+                                    if (TempY >= 0 && TempY < NewBitmap.Height)
+                                    {
+                                        Color TempColor = TempBitmap.GetPixel(TempX, TempY);
+                                        RValues[i] += TempColor.R;
+                                        GValues[i] += TempColor.G;
+                                        BValues[i] += TempColor.B;
+                                        if (TempColor.R > MaxRValue[i])
+                                        {
+                                            MaxRValue[i] = TempColor.R;
+                                        }
+                                        else if (TempColor.R < MinRValue[i])
+                                        {
+                                            MinRValue[i] = TempColor.R;
+                                        }
+
+                                        if (TempColor.G > MaxGValue[i])
+                                        {
+                                            MaxGValue[i] = TempColor.G;
+                                        }
+                                        else if (TempColor.G < MinGValue[i])
+                                        {
+                                            MinGValue[i] = TempColor.G;
+                                        }
+
+                                        if (TempColor.B > MaxBValue[i])
+                                        {
+                                            MaxBValue[i] = TempColor.B;
+                                        }
+                                        else if (TempColor.B < MinBValue[i])
+                                        {
+                                            MinBValue[i] = TempColor.B;
+                                        }
+                                        ++NumPixels[i];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    int j = 0;
+                    int MinDifference = 10000;
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        int CurrentDifference = (MaxRValue[i] - MinRValue[i]) + (MaxGValue[i] - MinGValue[i]) + (MaxBValue[i] - MinBValue[i]);
+                        if (CurrentDifference < MinDifference && NumPixels[i] > 0)
+                        {
+                            j = i;
+                            MinDifference = CurrentDifference;
+                        }
+                    }
+
+                    Color MeanPixel = Color.FromArgb(RValues[j] / NumPixels[j],
+                        GValues[j] / NumPixels[j],
+                        BValues[j] / NumPixels[j]);
+                    NewBitmap.SetPixel(x, y, MeanPixel);
+                }
+            }
+            return (System.Drawing.Image)NewBitmap;
+        }
+        public static System.Drawing.Image AdjustContrast(System.Drawing.Image OriginalImage, float Value)
+        {
+            Bitmap NewBitmap = new Bitmap(OriginalImage.Width, OriginalImage.Height);
+            //BitmapData NewData = Image.LockImage(NewBitmap);
+            //BitmapData OldData = Image.LockImage(OriginalImage);
+            //int NewPixelSize = Image.GetPixelSize(NewData);
+            //int OldPixelSize = Image.GetPixelSize(OldData);
+            //Value = (100.0f + Value) / 100.0f;
+            //Value *= Value;
+
+            //for (int x = 0; x < NewBitmap.Width; ++x)
+            //{
+            //    for (int y = 0; y < NewBitmap.Height; ++y)
+            //    {
+            //        Color Pixel = Image.GetPixel(OldData, x, y, OldPixelSize);
+            //        float Red = Pixel.R / 255.0f;
+            //        float Green = Pixel.G / 255.0f;
+            //        float Blue = Pixel.B / 255.0f;
+            //        Red = (((Red - 0.5f) * Value) + 0.5f) * 255.0f;
+            //        Green = (((Green - 0.5f) * Value) + 0.5f) * 255.0f;
+            //        Blue = (((Blue - 0.5f) * Value) + 0.5f) * 255.0f;
+            //        Image.SetPixel(NewData, x, y,
+            //            Color.FromArgb(MathHelper.Clamp((int)Red, 255, 0),
+            //            MathHelper.Clamp((int)Green, 255, 0),
+            //            MathHelper.Clamp((int)Blue, 255, 0)),
+            //            NewPixelSize);
+            //    }
+            //}
+            //Image.UnlockImage(NewBitmap, NewData);
+            //Image.UnlockImage(OriginalImage, OldData);
+            return NewBitmap;
+        }
+        public static System.Drawing.Image Dilate(System.Drawing.Image img, int Size)
+        {
+            System.Drawing.Bitmap TempBitmap = new Bitmap(img);
+            System.Drawing.Bitmap NewBitmap = new System.Drawing.Bitmap(TempBitmap.Width, TempBitmap.Height);
+            System.Drawing.Graphics NewGraphics = System.Drawing.Graphics.FromImage(NewBitmap);
+            NewGraphics.DrawImage(TempBitmap, new System.Drawing.Rectangle(0, 0, TempBitmap.Width, TempBitmap.Height), new System.Drawing.Rectangle(0, 0, TempBitmap.Width, TempBitmap.Height), System.Drawing.GraphicsUnit.Pixel);
+            NewGraphics.Dispose();
+            Random TempRandom = new Random();
+            int ApetureMin = -(Size / 2);
+            int ApetureMax = (Size / 2);
+            for (int x = 0; x < NewBitmap.Width; ++x)
+            {
+                for (int y = 0; y < NewBitmap.Height; ++y)
+                {
+                    int RValue = 0;
+                    int GValue = 0;
+                    int BValue = 0;
+                    for (int x2 = ApetureMin; x2 < ApetureMax; ++x2)
+                    {
+                        int TempX = x + x2;
+                        if (TempX >= 0 && TempX < NewBitmap.Width)
+                        {
+                            for (int y2 = ApetureMin; y2 < ApetureMax; ++y2)
+                            {
+                                int TempY = y + y2;
+                                if (TempY >= 0 && TempY < NewBitmap.Height)
+                                {
+                                    Color TempColor = TempBitmap.GetPixel(TempX, TempY);
+                                    if (TempColor.R > RValue)
+                                        RValue = TempColor.R;
+                                    if (TempColor.G > GValue)
+                                        GValue = TempColor.G;
+                                    if (TempColor.B > BValue)
+                                        BValue = TempColor.B;
+                                }
+                            }
+                        }
+                    }
+                    Color TempPixel = Color.FromArgb(RValue, GValue, BValue);
+                    NewBitmap.SetPixel(x, y, TempPixel);
+                }
+            }
+            return NewBitmap;
+        }
+        /// <summary>
+        /// Adjusts the Gamma
+        /// </summary>
+        /// <param name="OriginalImage">Image to change</param>
+        /// <param name="Value">Used to build the gamma ramp (usually .2 to 5)</param>
+        /// <returns>A bitmap object</returns>
+        public static Bitmap AdjustGamma(Bitmap OriginalImage, float Value)
+        {
+            Bitmap NewBitmap = new Bitmap(OriginalImage.Width, OriginalImage.Height);
+            //BitmapData NewData = Image.LockImage(NewBitmap);
+            //BitmapData OldData = Image.LockImage(OriginalImage);
+            //int NewPixelSize = Image.GetPixelSize(NewData);
+            //int OldPixelSize = Image.GetPixelSize(OldData);
+
+            //int[] RedRamp = new int[256];
+            //int[] GreenRamp = new int[256];
+            //int[] BlueRamp = new int[256];
+            //for (int x = 0; x < 256; ++x)
+            //{
+            //    RedRamp[x] = MathHelper.Clamp((int)((255.0 * System.Math.Pow(x / 255.0, 1.0 / Value)) + 0.5), 255, 0);
+            //    GreenRamp[x] = MathHelper.Clamp((int)((255.0 * System.Math.Pow(x / 255.0, 1.0 / Value)) + 0.5), 255, 0);
+            //    BlueRamp[x] = MathHelper.Clamp((int)((255.0 * System.Math.Pow(x / 255.0, 1.0 / Value)) + 0.5), 255, 0);
+            //}
+
+            //for (int x = 0; x < NewBitmap.Width; ++x)
+            //{
+            //    for (int y = 0; y < NewBitmap.Height; ++y)
+            //    {
+            //        Color Pixel = Image.GetPixel(OldData, x, y, OldPixelSize);
+            //        int Red = RedRamp[Pixel.R];
+            //        int Green = GreenRamp[Pixel.G];
+            //        int Blue = BlueRamp[Pixel.B];
+            //        Image.SetPixel(NewData, x, y, Color.FromArgb(Red, Green, Blue), NewPixelSize);
+            //    }
+            //}
+
+            //Image.UnlockImage(NewBitmap, NewData);
+            //Image.UnlockImage(OriginalImage, OldData);
+            return NewBitmap;
+        }
+        //public static Image BoxBlur(Image Image, int Size)
+        //{
+        //    Filter TempFilter = new Filter(Size, Size);
+        //    for (int x = 0; x < Size; ++x)
+        //    {
+        //        for (int y = 0; y < Size; ++y)
+        //        {
+        //            TempFilter.MyFilter[x, y] = 1;
+        //        }
+        //    }
+        //    return TempFilter.ApplyFilter(Image);
+        //}
+        public static Bitmap MedianFilter(Bitmap Image, int Size)
+        {
+            System.Drawing.Bitmap TempBitmap = Image;
+            System.Drawing.Bitmap NewBitmap = new System.Drawing.Bitmap(TempBitmap.Width, TempBitmap.Height);
+            System.Drawing.Graphics NewGraphics = System.Drawing.Graphics.FromImage(NewBitmap);
+            NewGraphics.DrawImage(TempBitmap, new System.Drawing.Rectangle(0, 0, TempBitmap.Width, TempBitmap.Height), new System.Drawing.Rectangle(0, 0, TempBitmap.Width, TempBitmap.Height), System.Drawing.GraphicsUnit.Pixel);
+            NewGraphics.Dispose();
+            Random TempRandom = new Random();
+            int ApetureMin = -(Size / 2);
+            int ApetureMax = (Size / 2);
+            for (int x = 0; x < NewBitmap.Width; ++x)
+            {
+                for (int y = 0; y < NewBitmap.Height; ++y)
+                {
+                    List<int> RValues = new List<int>();
+                    List<int> GValues = new List<int>();
+                    List<int> BValues = new List<int>();
+                    for (int x2 = ApetureMin; x2 < ApetureMax; ++x2)
+                    {
+                        int TempX = x + x2;
+                        if (TempX >= 0 && TempX < NewBitmap.Width)
+                        {
+                            for (int y2 = ApetureMin; y2 < ApetureMax; ++y2)
+                            {
+                                int TempY = y + y2;
+                                if (TempY >= 0 && TempY < NewBitmap.Height)
+                                {
+                                    Color TempColor = TempBitmap.GetPixel(TempX, TempY);
+                                    RValues.Add(TempColor.R);
+                                    GValues.Add(TempColor.G);
+                                    BValues.Add(TempColor.B);
+                                }
+                            }
+                        }
+                    }
+                    RValues.Sort();
+                    GValues.Sort();
+                    BValues.Sort();
+                    Color MedianPixel = Color.FromArgb(RValues[RValues.Count / 2],
+                        GValues[GValues.Count / 2],
+                        BValues[BValues.Count / 2]);
+                    NewBitmap.SetPixel(x, y, MedianPixel);
+                }
+            }
+            return NewBitmap;
+        }
         #endregion
 
         #region Methods Protected
@@ -678,25 +1056,25 @@ namespace Droid_Image
         }
         private void LaunchReturnV()
         {
-            Image img = _picturebox.Image;
+            System.Drawing.Image img = _picturebox.Image;
             img.RotateFlip(RotateFlipType.Rotate180FlipY);
             _picturebox.Image = img;
         }
         private void LaunchReturnH()
         {
-            Image img = _picturebox.Image;
+            System.Drawing.Image img = _picturebox.Image;
             img.RotateFlip(RotateFlipType.Rotate180FlipX);
             _picturebox.Image = img;
         }
         private void LaunchRotationL()
         {
-            Image img = _picturebox.Image;
+            System.Drawing.Image img = _picturebox.Image;
             img.RotateFlip(RotateFlipType.Rotate270FlipNone);
             _picturebox.Image = img;
         }
         private void LaunchRotationR()
         {
-            Image img = _picturebox.Image;
+            System.Drawing.Image img = _picturebox.Image;
             img.RotateFlip(RotateFlipType.Rotate90FlipNone);
             _picturebox.Image = img;
         }
@@ -1049,35 +1427,48 @@ namespace Droid_Image
                 //}
             }
         }
-        private void LaunchGoogleImg(string direction = "")
+        private void LaunchGoogleImg(string direction = "", int count = 42, bool icon = false)
         {
             if (_textSearchChanged)
             {
-                _webSearchUrls = Droid_web.Web.GetImages(_textSearch);
+                _webSearchUrls = icon ? Droid.Web.Web.GetIcon(_textSearch) : Droid.Web.Web.GetImages(_textSearch);
                 _indexImageWeb = -1;
             }
 
-            for (int i = 0; i < 42; i++)
+            for (int i = 0; i < count; i++)
             {
-                if (direction.Equals("back")) _indexImageWeb--;
-                else _indexImageWeb++;
-
-                if (_indexImageWeb >= _webSearchUrls.Count) { _indexImageWeb = 0; }
-                if (_indexImageWeb < 0) { _indexImageWeb = _webSearchUrls.Count - 1; }
-
-                string luckyUrl = _webSearchUrls[_indexImageWeb];
-
-                HttpWebRequest webRequest = (HttpWebRequest)HttpWebRequest.Create(luckyUrl);
-                webRequest.AllowWriteStreamBuffering = true;
-                webRequest.Timeout = 30000;
-                WebResponse webResponse = webRequest.GetResponse();
-                Stream stream = webResponse.GetResponseStream();
-
-                CurrentImage = Image.FromStream(stream);
-                if (_currentImage != null)
+                try
                 {
-                    _pictureByte = imageToByteArray(_currentImage);
-                    break;
+                    if (direction.Equals("back")) _indexImageWeb--;
+                    else _indexImageWeb++;
+
+                    if (_indexImageWeb >= _webSearchUrls.Count) { _indexImageWeb = 0; }
+                    if (_indexImageWeb < 0) { _indexImageWeb = _webSearchUrls.Count - 1; }
+
+                    string luckyUrl = _webSearchUrls[_indexImageWeb];
+
+                    HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(luckyUrl);
+                    webRequest.AllowWriteStreamBuffering = true;
+                    webRequest.Timeout = 30000;
+                    using (WebResponse webResponse = webRequest.GetResponse())
+                    {
+                        using (Stream stream = webResponse.GetResponseStream())
+                        { 
+                            CurrentImage = System.Drawing.Image.FromStream(stream);
+                            if (_currentImage != null)
+                            {
+                                _pictureByte = imageToByteArray(_currentImage);
+                                break;
+                            }
+                        }
+                    }
+                }
+                catch (WebException wex)
+                {
+                    count++;
+                }
+                catch (Exception ex)
+                {
                 }
             }
             AddImage();
@@ -1200,7 +1591,7 @@ namespace Droid_Image
                     _currentImage = null;
                 }
                 byte[] array = Convert.FromBase64String(_serialiseString);
-                Image image = Image.FromStream(new MemoryStream(array));
+                System.Drawing.Image image = System.Drawing.Image.FromStream(new MemoryStream(array));
                 _currentImage = image;
             }
             else
@@ -1259,10 +1650,10 @@ namespace Droid_Image
                     OpenFileDialog ofd = new OpenFileDialog();
                     if (ofd.ShowDialog() == DialogResult.OK)
                     {
-                        _comparisonImage = Image.FromFile(ofd.FileName);
+                        _comparisonImage = System.Drawing.Image.FromFile(ofd.FileName);
                     }
                 }
-                Image clone = (Image)_currentImage.Clone();
+                System.Drawing.Image clone = (System.Drawing.Image)_currentImage.Clone();
                 difference = (int)(ImageTool.GetPercentageDifference(clone, _comparisonImage) * 100);
                 _comparisonImage = null;
             }
@@ -1308,10 +1699,10 @@ namespace Droid_Image
             imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
             return ms.ToArray();
         }
-        private Image byteArrayToImage(byte[] byteArrayIn)
+        private System.Drawing.Image byteArrayToImage(byte[] byteArrayIn)
         {
             MemoryStream ms = new MemoryStream(byteArrayIn);
-            Image returnImage = Image.FromStream(ms);
+            System.Drawing.Image returnImage = System.Drawing.Image.FromStream(ms);
             return returnImage;
         }
         private void EnableMouseScan()
@@ -1474,7 +1865,7 @@ namespace Droid_Image
             }
             else
             {
-                _sheet = new Panel();
+                _sheet = new PanelScrollableCustom();
                 _sheet.AutoScroll = true;
                 _sheet.BorderStyle = BorderStyle.None;
                 _sheet.AutoScroll = true;
@@ -1559,14 +1950,14 @@ namespace Droid_Image
             }
             return null;
         }
-        private static Image cropImage(Image img, Rectangle cropArea)
+        private static System.Drawing.Image cropImage(System.Drawing.Image img, Rectangle cropArea)
         {
             Bitmap bmpImage = new Bitmap(img);
             Bitmap bmpCrop = bmpImage.Clone(cropArea,
                                             bmpImage.PixelFormat);
-            return (Image)(bmpCrop);
+            return (System.Drawing.Image)(bmpCrop);
         }
-        private static Image resizeImage(Image imgToResize, Size size)
+        private static System.Drawing.Image resizeImage(System.Drawing.Image imgToResize, Size size)
         {
             int sourceWidth = imgToResize.Width;
             int sourceHeight = imgToResize.Height;
@@ -1587,21 +1978,21 @@ namespace Droid_Image
             int destHeight = (int)(sourceHeight * nPercent);
 
             Bitmap b = new Bitmap(destWidth, destHeight);
-            Graphics g = Graphics.FromImage((Image)b);
+            Graphics g = Graphics.FromImage((System.Drawing.Image)b);
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
             g.DrawImage(imgToResize, 0, 0, destWidth, destHeight);
             g.Dispose();
 
-            return (Image)b;
+            return (System.Drawing.Image)b;
         }
         private void RotateImage(float angle)
         {
             if (_picturebox.Image == null)
                 return;
 
-            Image oldImage = _picturebox.Image;
-            Image newImage = RotateImage(_picturebox.Image, angle);
+            System.Drawing.Image oldImage = _picturebox.Image;
+            System.Drawing.Image newImage = RotateImage(_picturebox.Image, angle);
 
             _picturebox.Image = newImage;
             _picturebox.Refresh();
@@ -1611,7 +2002,7 @@ namespace Droid_Image
                 oldImage.Dispose();
             }
         }
-        private static Bitmap RotateImage(Image image, float angle)
+        private static Bitmap RotateImage(System.Drawing.Image image, float angle)
         {
             if (image == null) Log.Write("[ERR : 0300] No Image found !");
 
@@ -2100,3 +2491,5 @@ namespace Droid_Image
         #endregion
     }
 }
+
+

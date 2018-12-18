@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using Tools4Libraries;
 using System.Drawing;
 
-namespace Droid_Image
+namespace Droid.Image
 {
     /// <summary>
     /// Description of ToolStripMenuIMG.

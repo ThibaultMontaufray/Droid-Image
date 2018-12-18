@@ -1,4 +1,4 @@
-using Droid_Image;
+using Droid.Image;
 using NUnit.Framework;
 using System.Drawing;
 

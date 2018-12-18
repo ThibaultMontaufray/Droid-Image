@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
 
-namespace Droid_Image
+namespace Droid.Image
 {
 	/// <summary>
 	/// ZoomPanImageBox is a specialized ImageBox with Pan and Zoom control.
@@ -188,7 +188,7 @@ namespace Droid_Image
 		/// </summary>
 		[Browsable(true),
 		Description("Image loaded into the box.")]
-		public Image Image
+		public System.Drawing.Image Image
 		{
 			get
 			{

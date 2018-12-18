@@ -4,7 +4,7 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Runtime.InteropServices;
 
-namespace Droid_Image
+namespace Droid.Image
 {
     public partial class Service : ServiceBase
     {
@@ -51,7 +51,7 @@ namespace Droid_Image
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
 
-        private const string SERVICENAME = "Droid_image";
+        private const string SERVICENAME = "Droid.image";
         private int eventId;
         #endregion
 

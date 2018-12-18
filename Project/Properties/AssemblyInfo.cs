@@ -9,11 +9,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Droid_img")]
+[assembly: AssemblyTitle("Droid.img")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("servOdroid Inc.")]
-[assembly: AssemblyProduct("Droid_img")]
+[assembly: AssemblyProduct("Droid.img")]
 [assembly: AssemblyCopyright("Copyright 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

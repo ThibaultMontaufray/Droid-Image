@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.ServiceProcess;
 
-namespace Droid_Image
+namespace Droid.Image
 {
     class Program
     {

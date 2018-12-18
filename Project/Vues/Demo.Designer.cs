@@ -1,4 +1,4 @@
-﻿namespace Droid_Image
+﻿namespace Droid.Image
 {
     partial class Demo
     {

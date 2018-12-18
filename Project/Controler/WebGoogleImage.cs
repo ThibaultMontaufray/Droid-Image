@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 
-namespace Droid_Image
+namespace Droid.Image
 {
     public static class GoogleImage
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Droid_Image.ImageComparison.ComInterop
+namespace Droid.Image.Comparison.ComInterop
 {
     [Guid("221de9e9-852a-4a8a-bba7-b9727a8a155d")]
     [ClassInterface(ClassInterfaceType.None)]

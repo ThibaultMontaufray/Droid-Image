@@ -7,7 +7,7 @@ using System.Text;
 // Use, alter and redistribute this code freely,
 // but please leave this comment :)
 
-namespace Droid_Image.ImageComparison
+namespace Droid.Image.Comparison
 {
 
     /// <summary>
@@ -49,7 +49,7 @@ namespace Droid_Image.ImageComparison
         /// Constructs a new Histogram from a file, given its path
         /// </summary>
         /// <param name="filePath">The path to the image to work with</param>
-        public Histogram(string filePath) : this((Bitmap)Image.FromFile(filePath)) { }
+        public Histogram(string filePath) : this((Bitmap)System.Drawing.Image.FromFile(filePath)) { }
 
 
         /// <summary>
