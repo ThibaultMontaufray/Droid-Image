@@ -73,11 +73,11 @@ namespace Droid.Image
             //rb.QuickAccessToolbar.Visible = false;
 
             RibbonButton b_open = new RibbonButton("Open");
-            b_open.SmallImage = Tools4Libraries.Resources.ResourceIconSet32Default.open_folder;
+            b_open.SmallImage = Tools.Utilities.Resources.ResourceIconSet32Default.open_folder;
             b_open.Click += B_open_Click;
 
             RibbonButton b_exit = new RibbonButton("Exit");
-            b_exit.SmallImage = Tools4Libraries.Resources.ResourceIconSet32Default.door_out;
+            b_exit.SmallImage = Tools.Utilities.Resources.ResourceIconSet32Default.door_out;
             b_exit.Click += B_exit_Click;
 
             _ribbon.OrbDropDown.MenuItems.Add(b_open);
@@ -104,17 +104,17 @@ namespace Droid.Image
         #region Event
         private void Tsm_ActionAppened(object sender, System.EventArgs e)
         {
-            Tools4Libraries.ToolBarEventArgs eventArg = (Tools4Libraries.ToolBarEventArgs)e;
+            Tools.Utilities.ToolBarEventArgs eventArg = (Tools.Utilities.ToolBarEventArgs)e;
             if (eventArg.EventText.Equals("exit")) this.Close();
             _intImg.GlobalAction(sender, e);
         }
         private void B_open_Click(object sender, System.EventArgs e)
         {
-            Tsm_ActionAppened(null, new Tools4Libraries.ToolBarEventArgs("open"));
+            Tsm_ActionAppened(null, new Tools.Utilities.ToolBarEventArgs("open"));
         }
         private void B_exit_Click(object sender, System.EventArgs e)
         {
-            Tsm_ActionAppened(null, new Tools4Libraries.ToolBarEventArgs("exit"));
+            Tsm_ActionAppened(null, new Tools.Utilities.ToolBarEventArgs("exit"));
         }
         private void _intImg_MessageAvailable(object sender, System.EventArgs e)
         {

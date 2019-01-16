@@ -49,7 +49,7 @@ namespace Droid.Image.Comparison
         /// Constructs a new Histogram from a file, given its path
         /// </summary>
         /// <param name="filePath">The path to the image to work with</param>
-        public Histogram(string filePath) : this((Bitmap)System.Drawing.Image.FromFile(filePath)) { }
+        public Histogram(string filePath) : this((Bitmap)System.Drawing.Bitmap.FromFile(filePath)) { }
 
 
         /// <summary>
@@ -103,8 +103,8 @@ namespace Droid.Image.Comparison
 
             for (int i = 0; i < 3; i++)
             {
-                g.DrawString(p[i].Color.ToKnownColor() + ", max value: " + maxValues[i], SystemFonts.SmallCaptionFont, Brushes.Silver, margin + 11, yOffset * i + margin + margin + 1);
-                g.DrawString(p[i].Color.ToKnownColor() + ", max value: " + maxValues[i], SystemFonts.SmallCaptionFont, Brushes.Black, margin + 10, yOffset * i + margin + margin);
+                g.DrawString(p[i].Color.ToString() + ", max value: " + maxValues[i], SystemFonts.SmallCaptionFont, Brushes.Silver, margin + 11, yOffset * i + margin + margin + 1);
+                g.DrawString(p[i].Color.ToString() + ", max value: " + maxValues[i], SystemFonts.SmallCaptionFont, Brushes.Black, margin + 10, yOffset * i + margin + margin);
                 g.DrawRectangle(p[i], margin, yOffset * i + margin, 256, oneColorHeight);
             }
             g.Dispose();

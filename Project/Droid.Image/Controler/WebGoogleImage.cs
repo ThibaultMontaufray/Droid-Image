@@ -17,10 +17,10 @@ namespace Droid.Image
             Uri proxy = WebRequest.DefaultWebProxy.GetProxy(new Uri(url));
             var request = (HttpWebRequest)WebRequest.Create(url);
 
-            if (!string.IsNullOrEmpty(Tools4Libraries.Params.WebProxyHost))
+            if (!string.IsNullOrEmpty(Tools.Utilities.Params.WebProxyHost))
             {
-                request.Proxy = new WebProxy(Tools4Libraries.Params.WebProxyHost, proxy.Port);
-                request.Proxy.Credentials = new NetworkCredential(Tools4Libraries.Params.WebProxyLogin, Tools4Libraries.Params.WebProxyPassword);
+                request.Proxy = new WebProxy(Tools.Utilities.Params.WebProxyHost, proxy.Port);
+                request.Proxy.Credentials = new NetworkCredential(Tools.Utilities.Params.WebProxyLogin, Tools.Utilities.Params.WebProxyPassword);
             }
             request.Accept = "text/html, application/xhtml+xml, */*";
             request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko";
@@ -61,10 +61,10 @@ namespace Droid.Image
                 {
                     Uri proxy = WebRequest.DefaultWebProxy.GetProxy(new Uri(url));
                     var request = (HttpWebRequest)WebRequest.Create(url);
-                    if (!string.IsNullOrEmpty(Tools4Libraries.Params.WebProxyHost))
+                    if (!string.IsNullOrEmpty(Tools.Utilities.Params.WebProxyHost))
                     {
-                        request.Proxy = new WebProxy(Tools4Libraries.Params.WebProxyHost, proxy.Port);
-                        request.Proxy.Credentials = new NetworkCredential(Tools4Libraries.Params.WebProxyLogin, Tools4Libraries.Params.WebProxyPassword);
+                        request.Proxy = new WebProxy(Tools.Utilities.Params.WebProxyHost, proxy.Port);
+                        request.Proxy.Credentials = new NetworkCredential(Tools.Utilities.Params.WebProxyLogin, Tools.Utilities.Params.WebProxyPassword);
                     }
                     var response = (HttpWebResponse)request.GetResponse();
                     

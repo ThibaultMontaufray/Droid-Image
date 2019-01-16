@@ -36,23 +36,23 @@ namespace Droid.Image
         /// </summary>
         /// <param name="OriginalImage">Image sent in</param>
         /// <returns>An image with the color matrix applied</returns>
-        public System.Drawing.Image Apply(System.Drawing.Image OriginalImage)
+        public Bitmap Apply(Bitmap OriginalImage)
         {
             Bitmap NewBitmap = new Bitmap(OriginalImage.Width, OriginalImage.Height);
             using (Graphics NewGraphics = Graphics.FromImage(NewBitmap))
             {
-                System.Drawing.Imaging.ColorMatrix NewColorMatrix = new System.Drawing.Imaging.ColorMatrix(Matrix);
+                System.Drawing.Imaging.ColorMatrix NewColorMatrix = new System.Drawing.Imaging.ColorMatrix();
                 using (ImageAttributes Attributes = new ImageAttributes())
                 {
                     Attributes.SetColorMatrix(NewColorMatrix);
                     NewGraphics.DrawImage(OriginalImage,
-                        new System.Drawing.Rectangle(0, 0, OriginalImage.Width, OriginalImage.Height),
+                        new Rectangle(0, 0, OriginalImage.Width, OriginalImage.Height),
                         0, 0, OriginalImage.Width, OriginalImage.Height,
                         GraphicsUnit.Pixel,
                         Attributes);
                 }
             }
-            return (System.Drawing.Image)NewBitmap;
+            return NewBitmap;
         }
         #endregion
     }

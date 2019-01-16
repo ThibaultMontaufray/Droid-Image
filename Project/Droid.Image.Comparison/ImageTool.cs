@@ -31,8 +31,8 @@ namespace Droid.Image.Comparison
         {
             if (CheckIfFileExists(image1Path) && CheckIfFileExists(image2Path))
             {
-                System.Drawing.Image img1 = System.Drawing.Image.FromFile(image1Path);
-                System.Drawing.Image img2 = System.Drawing.Image.FromFile(image2Path);
+                System.Drawing.Bitmap img1 = new System.Drawing.Bitmap(image1Path);
+                System.Drawing.Bitmap img2 = new System.Drawing.Bitmap(image2Path);
 
                 float difference = img1.PercentageDifference(img2, threshold);
 
@@ -43,6 +43,15 @@ namespace Droid.Image.Comparison
             }
             else return -1;
         }
+        public static float GetPercentageDifference(Bitmap img1, Bitmap img2)
+        {
+            float difference = img1.PercentageDifference(img2, 3);
+
+            img1.Dispose();
+            img2.Dispose();
+
+            return difference;
+        }
 
         /// <summary>
         /// Gets the difference between two images as a percentage
@@ -52,7 +61,7 @@ namespace Droid.Image.Comparison
         /// <param name="image2">The second image</param>
         /// <param name="threshold">How big a difference (out of 255) will be ignored - the default is 3.</param>
         /// <returns>The difference between the two images as a percentage</returns>
-        public static float GetPercentageDifference(System.Drawing.Image img1, System.Drawing.Image img2, byte threshold = 3)
+        public static float GetPercentageDifference(System.Drawing.Bitmap img1, System.Drawing.Bitmap img2, byte threshold = 3)
         {
             if (img1 != null && img2 != null)
             {
@@ -78,8 +87,8 @@ namespace Droid.Image.Comparison
         {
             if (CheckIfFileExists(image1Path) && CheckIfFileExists(image2Path))
             {
-                System.Drawing.Image img1 = System.Drawing.Image.FromFile(image1Path);
-                System.Drawing.Image img2 = System.Drawing.Image.FromFile(image2Path);
+                System.Drawing.Bitmap img1 = new System.Drawing.Bitmap(image1Path);
+                System.Drawing.Bitmap img2 = new System.Drawing.Bitmap(image2Path);
 
                 float difference = img1.BhattacharyyaDifference(img2);
 
@@ -99,7 +108,7 @@ namespace Droid.Image.Comparison
         /// <param name="image2">The second image</param>
         /// <param name="threshold">How big a difference (out of 255) will be ignored - the default is 3.</param>
         /// <returns>The difference between the two images as a percentage</returns>
-        public static float GetBhattacharyyaDifference(System.Drawing.Image img1, System.Drawing.Image img2)
+        public static float GetBhattacharyyaDifference(System.Drawing.Bitmap img1, System.Drawing.Bitmap img2)
         {
             if (img1 != null && img2 != null)
             {
@@ -152,7 +161,7 @@ namespace Droid.Image.Comparison
             var imagePathsAndGrayValues = new List<Tuple<string, byte[,]>>();
             foreach (var imagePath in pathsOfPossibleDuplicateImages)
             {
-                using (System.Drawing.Image image = System.Drawing.Image.FromFile(imagePath))
+                using (System.Drawing.Bitmap image = new System.Drawing.Bitmap(imagePath))
                 {
                     byte[,] grayValues = image.GetGrayScaleValues();
                     var tuple = new Tuple<string, byte[,]>(imagePath, grayValues);

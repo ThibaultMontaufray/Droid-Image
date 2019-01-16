@@ -9,7 +9,7 @@
 using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using Tools4Libraries;
+using Tools.Utilities;
 using System.Drawing;
 
 namespace Droid.Image
@@ -214,12 +214,12 @@ namespace Droid.Image
         }
         public void SwitchMode()
         {
-            _modeView.Image = Tools4Libraries.Resources.ResourceIconSet32Default.shape_square;
-            _modeView.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.shape_square;
-            _modeEdition.Image = Tools4Libraries.Resources.ResourceIconSet32Default.shape_square;
-            _modeEdition.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.shape_square;
-            _modeAnalyse.Image = Tools4Libraries.Resources.ResourceIconSet32Default.shape_square;
-            _modeAnalyse.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.shape_square;
+            _modeView.Image = Tools.Utilities.Resources.ResourceIconSet32Default.shape_square;
+            _modeView.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.shape_square;
+            _modeEdition.Image = Tools.Utilities.Resources.ResourceIconSet32Default.shape_square;
+            _modeEdition.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.shape_square;
+            _modeAnalyse.Image = Tools.Utilities.Resources.ResourceIconSet32Default.shape_square;
+            _modeAnalyse.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.shape_square;
 
             if (_intImg != null)
             { 
@@ -230,16 +230,16 @@ namespace Droid.Image
                         _panelNavigation.Visible = false;
                         _panelParsing.Visible = false;
                         _panelText.Visible = true;
-                        _modeEdition.Image = Tools4Libraries.Resources.ResourceIconSet32Default.check_box;
-                        _modeEdition.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.check_box;
+                        _modeEdition.Image = Tools.Utilities.Resources.ResourceIconSet32Default.check_box;
+                        _modeEdition.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.check_box;
                         break;
                     case Mode.ANALYSE:
                         _panelDrawing.Visible = false;
                         _panelNavigation.Visible = false;
                         _panelParsing.Visible = true;
                         _panelText.Visible = false;
-                        _modeAnalyse.Image = Tools4Libraries.Resources.ResourceIconSet32Default.check_box;
-                        _modeAnalyse.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.check_box;
+                        _modeAnalyse.Image = Tools.Utilities.Resources.ResourceIconSet32Default.check_box;
+                        _modeAnalyse.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.check_box;
                         break;
                     case Mode.VIEW:
                     default:
@@ -247,8 +247,8 @@ namespace Droid.Image
                         _panelNavigation.Visible = true;
                         _panelParsing.Visible = false;
                         _panelText.Visible = false;
-                        _modeView.Image = Tools4Libraries.Resources.ResourceIconSet32Default.check_box;
-                        _modeView.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.check_box;
+                        _modeView.Image = Tools.Utilities.Resources.ResourceIconSet32Default.check_box;
+                        _modeView.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.check_box;
                         break;
                 }
             }
@@ -257,8 +257,8 @@ namespace Droid.Image
         {
             if (_intImg != null)
             {
-                _ts_diaporama.Image = _intImg.DiaporamaRunning ? Tools4Libraries.Resources.ResourceIconSet32Default.control_pause : Tools4Libraries.Resources.ResourceIconSet32Default.control_play;
-                _ts_diaporama.SmallImage = _intImg.DiaporamaRunning ? Tools4Libraries.Resources.ResourceIconSet16Default.control_pause : Tools4Libraries.Resources.ResourceIconSet16Default.control_play;
+                _ts_diaporama.Image = _intImg.DiaporamaRunning ? Tools.Utilities.Resources.ResourceIconSet32Default.control_pause : Tools.Utilities.Resources.ResourceIconSet32Default.control_play;
+                _ts_diaporama.SmallImage = _intImg.DiaporamaRunning ? Tools.Utilities.Resources.ResourceIconSet16Default.control_pause : Tools.Utilities.Resources.ResourceIconSet16Default.control_play;
             }
         }
         #endregion
@@ -269,38 +269,38 @@ namespace Droid.Image
             _ts_main_open = new RibbonButton("Open");
             _ts_main_open.ToolTip = "Open";
             _ts_main_open.Click += new EventHandler(tsb_Click);
-            _ts_main_open.Image = Tools4Libraries.Resources.ResourceIconSet32Default.open_folder;
-            _ts_main_open.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.open_folder;
+            _ts_main_open.Image = Tools.Utilities.Resources.ResourceIconSet32Default.open_folder;
+            _ts_main_open.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.open_folder;
             _ts_main_open.MinSizeMode = RibbonElementSizeMode.Large;
 
             _ts_save = new RibbonButton("Save");
             _ts_save.ToolTip = "Save";
             _ts_save.Click += new EventHandler(tsb_Click);
-            _ts_save.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.picture_save;
+            _ts_save.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.picture_save;
             _ts_save.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_saveas = new RibbonButton("Save as");
             _ts_saveas.ToolTip = "Save as";
             _ts_saveas.Click += new EventHandler(tsb_Click);
-            _ts_saveas.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.save_as;
+            _ts_saveas.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.save_as;
             _ts_saveas.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_zoomin = new RibbonButton("Zoom in");
             _ts_zoomin.ToolTip = "Zoom in";
             _ts_zoomin.Click += new EventHandler(tsb_Click);
-            _ts_zoomin.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.zoom_in;
+            _ts_zoomin.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.zoom_in;
             _ts_zoomin.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_zoomout = new RibbonButton("Zoom out");
             _ts_zoomout.ToolTip = "Zoom out";
             _ts_zoomout.Click += new EventHandler(tsb_Click);
-            _ts_zoomout.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.zoom_out;
+            _ts_zoomout.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.zoom_out;
             _ts_zoomout.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_delete = new RibbonButton("Delete");
             _ts_delete.ToolTip = "Delete";
             _ts_delete.Click += new EventHandler(tsb_Click);
-            _ts_delete.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.cross;
+            _ts_delete.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.cross;
             _ts_delete.MinSizeMode = RibbonElementSizeMode.Compact;
             
             RibbonItemGroup rig1 = new RibbonItemGroup();
@@ -316,7 +316,7 @@ namespace Droid.Image
             rig3.Items.Add(_ts_web_research);
             
             _panelMain = new System.Windows.Forms.RibbonPanel();
-            _panelMain.Image = Tools4Libraries.Resources.ResourceIconSet16Default.picture;
+            _panelMain.Image = Tools.Utilities.Resources.ResourceIconSet16Default.picture;
             _panelMain.Text = "Image";
             _panelMain.Items.Add(_ts_main_open);
             _panelMain.Items.Add(rig1);
@@ -330,8 +330,8 @@ namespace Droid.Image
             _modeView.Name = "View";
             _modeView.Text = _modeView.Name;
             _modeView.Click += new EventHandler(tsb_Click);
-            _modeView.Image = Tools4Libraries.Resources.ResourceIconSet32Default.check_box;
-            _modeView.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.check_box;
+            _modeView.Image = Tools.Utilities.Resources.ResourceIconSet32Default.check_box;
+            _modeView.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.check_box;
             _modeView.MinSizeMode = RibbonElementSizeMode.Medium;
             _modeView.MaxSizeMode = RibbonElementSizeMode.Medium;
 
@@ -339,8 +339,8 @@ namespace Droid.Image
             _modeEdition.Name = "Edition";
             _modeEdition.Text = _modeEdition.Name;
             _modeEdition.Click += new EventHandler(tsb_Click);
-            _modeEdition.Image = Tools4Libraries.Resources.ResourceIconSet32Default.shape_square;
-            _modeEdition.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.shape_square;
+            _modeEdition.Image = Tools.Utilities.Resources.ResourceIconSet32Default.shape_square;
+            _modeEdition.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.shape_square;
             _modeEdition.MinSizeMode = RibbonElementSizeMode.Medium;
             _modeEdition.MaxSizeMode = RibbonElementSizeMode.Medium;
 
@@ -348,13 +348,13 @@ namespace Droid.Image
             _modeAnalyse.Name = "Analyse";
             _modeAnalyse.Text = _modeAnalyse.Name;
             _modeAnalyse.Click += new EventHandler(tsb_Click);
-            _modeAnalyse.Image = Tools4Libraries.Resources.ResourceIconSet32Default.shape_square;
-            _modeAnalyse.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.shape_square;
+            _modeAnalyse.Image = Tools.Utilities.Resources.ResourceIconSet32Default.shape_square;
+            _modeAnalyse.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.shape_square;
             _modeAnalyse.MinSizeMode = RibbonElementSizeMode.Medium;
             _modeAnalyse.MaxSizeMode = RibbonElementSizeMode.Medium;
 
             _panelMode = new System.Windows.Forms.RibbonPanel("Mode");
-            _panelMode.Image = Tools4Libraries.Resources.ResourceIconSet16Default.pictures;
+            _panelMode.Image = Tools.Utilities.Resources.ResourceIconSet16Default.pictures;
             _panelMode.Items.Add(_modeView);
             _panelMode.Items.Add(_modeEdition);
             _panelMode.Items.Add(_modeAnalyse);
@@ -365,37 +365,37 @@ namespace Droid.Image
             _ts_fullscreen = new RibbonButton("Full screen");
             _ts_fullscreen.ToolTip = "Full screen";
             _ts_fullscreen.Click += new EventHandler(tsb_Click);
-            _ts_fullscreen.Image = Tools4Libraries.Resources.ResourceIconSet32Default.monitor;
-            _ts_fullscreen.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.monitor;
+            _ts_fullscreen.Image = Tools.Utilities.Resources.ResourceIconSet32Default.monitor;
+            _ts_fullscreen.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.monitor;
             _ts_fullscreen.MinSizeMode = RibbonElementSizeMode.Medium;
 
             _ts_diaporama = new RibbonButton("Diaporama");
             _ts_diaporama.ToolTip = "Diaporama";
             _ts_diaporama.Click += new EventHandler(tsb_Click);
-            _ts_diaporama.Image = Tools4Libraries.Resources.ResourceIconSet32Default.control_play;
-            _ts_diaporama.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.control_play;
+            _ts_diaporama.Image = Tools.Utilities.Resources.ResourceIconSet32Default.control_play;
+            _ts_diaporama.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.control_play;
             _ts_diaporama.MinSizeMode = RibbonElementSizeMode.Medium;
 
             _ts_toolpanelvisible = new RibbonButton("Visible");
             _ts_toolpanelvisible.Click += new EventHandler(tsb_Click);
-            _ts_toolpanelvisible.Image = Tools4Libraries.Resources.ResourceIconSet32Default.setting_tools;
-            _ts_toolpanelvisible.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.setting_tools;
+            _ts_toolpanelvisible.Image = Tools.Utilities.Resources.ResourceIconSet32Default.setting_tools;
+            _ts_toolpanelvisible.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.setting_tools;
             _ts_toolpanelvisible.MinSizeMode = RibbonElementSizeMode.Medium;
 
             _ts_back = new RibbonButton("Back");
             _ts_back.Click += new EventHandler(tsb_Click);
-            _ts_back.Image = Tools4Libraries.Resources.ResourceIconSet32Default.document_back;
-            _ts_back.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.document_back;
+            _ts_back.Image = Tools.Utilities.Resources.ResourceIconSet32Default.document_back;
+            _ts_back.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.document_back;
             _ts_back.MinSizeMode = RibbonElementSizeMode.Large;
 
             _ts_next = new RibbonButton("Next");
             _ts_next.Click += new EventHandler(tsb_Click);
-            _ts_next.Image = Tools4Libraries.Resources.ResourceIconSet32Default.document_next;
-            _ts_next.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.document_next;
+            _ts_next.Image = Tools.Utilities.Resources.ResourceIconSet32Default.document_next;
+            _ts_next.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.document_next;
             _ts_next.MinSizeMode = RibbonElementSizeMode.Large;
 
             _panelNavigation = new System.Windows.Forms.RibbonPanel();
-            _panelNavigation.Image = Tools4Libraries.Resources.ResourceIconSet16Default.node_tree;
+            _panelNavigation.Image = Tools.Utilities.Resources.ResourceIconSet16Default.node_tree;
             _panelNavigation.Text = "Navigation";
             _panelNavigation.Items.Add(_ts_back);
             _panelNavigation.Items.Add(_ts_next);
@@ -408,39 +408,39 @@ namespace Droid.Image
         {          
             _ts_tool_addImage = new RibbonButton("Insert image");
             _ts_tool_addImage.Click += new EventHandler(tsb_Click);
-            _ts_tool_addImage.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.insert_object;
+            _ts_tool_addImage.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.insert_object;
             _ts_tool_addImage.MinSizeMode = RibbonElementSizeMode.DropDown;
 
             _ts_tool_rgb = new RibbonButton("Color filter");
-            _ts_tool_rgb.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.layer_rgb;
-            _ts_tool_rgb.Image = Tools4Libraries.Resources.ResourceIconSet32Default.layer_rgb;
+            _ts_tool_rgb.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.layer_rgb;
+            _ts_tool_rgb.Image = Tools.Utilities.Resources.ResourceIconSet32Default.layer_rgb;
             _ts_tool_rgb.Style = RibbonButtonStyle.SplitDropDown;
             _ts_tool_rgb.MinSizeMode = RibbonElementSizeMode.DropDown;
             
             RibbonButton itemRed = new RibbonButton("Red");
             itemRed.Name = "rl_red_Click";
-            itemRed.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.tag_red;
+            itemRed.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.tag_red;
             itemRed.MinSizeMode = RibbonElementSizeMode.Compact;
             itemRed.Style = RibbonButtonStyle.Normal;
             itemRed.Click += tsb_Click;
             _ts_tool_rgb.DropDownItems.Add(itemRed);
             RibbonButton itemGreen = new RibbonButton("Green");
             itemGreen.Name = "rl_green_Click";
-            itemGreen.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.tag_green;
+            itemGreen.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.tag_green;
             itemGreen.MinSizeMode = RibbonElementSizeMode.Compact;
             itemGreen.Style = RibbonButtonStyle.Normal;
             itemGreen.Click += tsb_Click;
             _ts_tool_rgb.DropDownItems.Add(itemGreen);
             RibbonButton itemBlue = new RibbonButton("Blue");
             itemBlue.Name = "rl_blue_Click";
-            itemBlue.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.tag_blue;
+            itemBlue.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.tag_blue;
             itemBlue.MinSizeMode = RibbonElementSizeMode.Compact;
             itemBlue.Style = RibbonButtonStyle.Normal;
             itemBlue.Click += tsb_Click;
             _ts_tool_rgb.DropDownItems.Add(itemBlue);
 
             _panelView = new System.Windows.Forms.RibbonPanel("Tools");
-            _panelView.Image = Tools4Libraries.Resources.ResourceIconSet16Default.image_edit;
+            _panelView.Image = Tools.Utilities.Resources.ResourceIconSet16Default.image_edit;
             _panelView.Items.Add(_ts_tool_adjust);
             _panelView.Items.Add(_ts_size);
             _panelView.Items.Add(_ts_rotations);
@@ -454,30 +454,30 @@ namespace Droid.Image
         {
             _ts_code_qr = new RibbonButton("QR code");
             _ts_code_qr.Click += new EventHandler(tsb_Click);
-            _ts_code_qr.Image = Tools4Libraries.Resources.ResourceIconSet32Default.qrcode;
-            _ts_code_qr.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.qrcode;
+            _ts_code_qr.Image = Tools.Utilities.Resources.ResourceIconSet32Default.qrcode;
+            _ts_code_qr.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.qrcode;
             _ts_code_qr.MinSizeMode = RibbonElementSizeMode.Medium;
 
             _ts_code_barre = new RibbonButton("Code Barres");
             _ts_code_barre.Click += new EventHandler(tsb_Click);
-            _ts_code_barre.Image = Tools4Libraries.Resources.ResourceIconSet32Default.barcode;
-            _ts_code_barre.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.barcode;
+            _ts_code_barre.Image = Tools.Utilities.Resources.ResourceIconSet32Default.barcode;
+            _ts_code_barre.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.barcode;
             _ts_code_barre.MinSizeMode = RibbonElementSizeMode.Medium;
 
             _ts_recognition = new RibbonButton("Global analysing");
             _ts_recognition.Click += new EventHandler(tsb_Click);
-            _ts_recognition.Image = Tools4Libraries.Resources.ResourceIconSet32Default.brain_trainer;
-            _ts_recognition.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.brain_trainer;
+            _ts_recognition.Image = Tools.Utilities.Resources.ResourceIconSet32Default.brain_trainer;
+            _ts_recognition.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.brain_trainer;
             _ts_recognition.MinSizeMode = RibbonElementSizeMode.Medium;
 
             _ts_compare = new RibbonButton("Compare");
             _ts_compare.Click += new EventHandler(tsb_Click);
-            _ts_compare.Image = Tools4Libraries.Resources.ResourceIconSet32Default.picture_frame;
-            _ts_compare.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.picture_frame;
+            _ts_compare.Image = Tools.Utilities.Resources.ResourceIconSet32Default.picture_frame;
+            _ts_compare.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.picture_frame;
             _ts_recognition.MinSizeMode = RibbonElementSizeMode.Medium;
 
             _panelParsing = new System.Windows.Forms.RibbonPanel("Parsing");
-            _panelParsing.Image = Tools4Libraries.Resources.ResourceIconSet16Default.scanner;
+            _panelParsing.Image = Tools.Utilities.Resources.ResourceIconSet16Default.scanner;
             _panelParsing.Items.Add(_ts_code_qr);
             _panelParsing.Items.Add(_ts_code_barre);
             _panelParsing.Items.Add(_ts_recognition);
@@ -489,31 +489,31 @@ namespace Droid.Image
             _ts_undo = new RibbonButton("Undo");
             _ts_undo.ToolTip = "Undo";
             _ts_undo.Click += new EventHandler(tsb_Click);
-            _ts_undo.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.arrow_undo;
+            _ts_undo.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.arrow_undo;
             _ts_undo.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_redo = new RibbonButton("Redo");
             _ts_redo.ToolTip = "Redo";
             _ts_redo.Click += new EventHandler(tsb_Click);
-            _ts_redo.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.arrow_redo;
+            _ts_redo.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.arrow_redo;
             _ts_redo.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_copy = new RibbonButton("Copy");
             _ts_copy.ToolTip = "Copy";
             _ts_copy.Click += new EventHandler(tsb_Click);
-            _ts_copy.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.page_copy;
+            _ts_copy.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.page_copy;
             _ts_copy.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_cut = new RibbonButton("Cut");
             _ts_cut.ToolTip = "Cut";
             _ts_cut.Click += new EventHandler(tsb_Click);
-            _ts_cut.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.cut;
+            _ts_cut.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.cut;
             _ts_cut.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_paste = new RibbonButton("Paste");
             _ts_paste.ToolTip = "Paste";
             _ts_paste.Click += new EventHandler(tsb_Click);
-            _ts_paste.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.paste_plain;
+            _ts_paste.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.paste_plain;
             _ts_paste.MinSizeMode = RibbonElementSizeMode.Compact;
 
             RibbonItemGroup rig1 = new RibbonItemGroup();
@@ -540,7 +540,7 @@ namespace Droid.Image
             rig3.Items.Add(_ts_paste);
 
             _panelDrawing = new System.Windows.Forms.RibbonPanel("Drawing");
-            _panelDrawing.Image = Tools4Libraries.Resources.ResourceIconSet16Default.drawer;
+            _panelDrawing.Image = Tools.Utilities.Resources.ResourceIconSet16Default.drawer;
             _panelDrawing.Items.Add(rig1);
             _panelDrawing.Items.Add(rig2);
             _panelDrawing.Items.Add(rig3);
@@ -560,7 +560,7 @@ namespace Droid.Image
             rig2.Items.Add(_ts_font_strikethrought);
 
             _panelText = new System.Windows.Forms.RibbonPanel("Text");
-            _panelText.Image = Tools4Libraries.Resources.ResourceIconSet16Default.drawer;
+            _panelText.Image = Tools.Utilities.Resources.ResourceIconSet16Default.drawer;
             _panelText.Items.Add(rig1);
             _panelText.Items.Add(rig2);
             this.Panels.Add(_panelText);
@@ -576,17 +576,17 @@ namespace Droid.Image
 
             _ts_web_google = new RibbonButton("Google");
             _ts_web_google.Click += new EventHandler(tsb_Click);
-            _ts_web_google.Image = Tools4Libraries.Resources.ResourceIconSet32Default.google;
-            _ts_web_google.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.google;
+            _ts_web_google.Image = Tools.Utilities.Resources.ResourceIconSet32Default.google;
+            _ts_web_google.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.google;
 
             _ts_web_flikr = new RibbonButton("Flikr");
             _ts_web_flikr.Click += new EventHandler(tsb_Click);
-            _ts_web_flikr.Image = Tools4Libraries.Resources.ResourceIconSet32Default.flickr;
-            _ts_web_flikr.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.flickr;
+            _ts_web_flikr.Image = Tools.Utilities.Resources.ResourceIconSet32Default.flickr;
+            _ts_web_flikr.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.flickr;
             
             _ts_web_research = new RibbonButton();
             _ts_web_research.Name = "google";
-            _ts_web_research.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.google;
+            _ts_web_research.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.google;
             _ts_web_research.Style = RibbonButtonStyle.SplitDropDown;
             _ts_web_research.MinSizeMode = RibbonElementSizeMode.Compact;
             _ts_web_research.DropDownItems.Add(_ts_web_google);
@@ -596,32 +596,32 @@ namespace Droid.Image
         {
             _ts_tool_contrast = new RibbonButton("Contraste");
             _ts_tool_contrast.Click += new EventHandler(tsb_Click);
-            _ts_tool_contrast.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.contrast;
+            _ts_tool_contrast.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.contrast;
             _ts_tool_contrast.MinSizeMode = RibbonElementSizeMode.DropDown;
 
             _ts_tool_light = new RibbonButton("Light");
             _ts_tool_light.Click += new EventHandler(tsb_Click);
-            _ts_tool_light.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.lightbulb;
+            _ts_tool_light.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.lightbulb;
             _ts_tool_light.MinSizeMode = RibbonElementSizeMode.DropDown;
 
             _ts_tool_crop = new RibbonButton("Crop");
             _ts_tool_crop.Click += new EventHandler(tsb_Click);
-            _ts_tool_crop.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.transform_crop;
+            _ts_tool_crop.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.transform_crop;
             _ts_tool_crop.MinSizeMode = RibbonElementSizeMode.DropDown;
 
             _ts_tool_gray = new RibbonButton("Gray");
             _ts_tool_gray.Click += new EventHandler(tsb_Click);
-            _ts_tool_gray.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.convert_color_to_gray;
+            _ts_tool_gray.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.convert_color_to_gray;
             _ts_tool_gray.MinSizeMode = RibbonElementSizeMode.DropDown;
 
             _ts_tool_invert = new RibbonButton("Invert");
             _ts_tool_invert.Click += new EventHandler(tsb_Click);
-            _ts_tool_invert.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.image;
+            _ts_tool_invert.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.image;
             _ts_tool_invert.MinSizeMode = RibbonElementSizeMode.DropDown;
 
             _ts_tool_adjust = new RibbonButton("Adjust");
-            _ts_tool_adjust.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.scale_image;
-            _ts_tool_adjust.Image = Tools4Libraries.Resources.ResourceIconSet32Default.transform_rotate;
+            _ts_tool_adjust.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.scale_image;
+            _ts_tool_adjust.Image = Tools.Utilities.Resources.ResourceIconSet32Default.transform_rotate;
             _ts_tool_adjust.Style = RibbonButtonStyle.SplitDropDown;
             _ts_tool_adjust.MinSizeMode = RibbonElementSizeMode.DropDown;
             _ts_tool_adjust.DropDownItems.Add(_ts_tool_contrast);
@@ -637,25 +637,25 @@ namespace Droid.Image
             _ts_returnH.MinSizeMode = RibbonElementSizeMode.Compact;
             _ts_returnH.Style = RibbonButtonStyle.Normal;
             _ts_returnH.Click += new EventHandler(tsb_Click);
-            _ts_returnH.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.shape_flip_vertical;
+            _ts_returnH.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.shape_flip_vertical;
 
             _ts_returnV = new RibbonButton("Return vertical");
             _ts_returnV.MinSizeMode = RibbonElementSizeMode.Compact;
             _ts_returnV.Style = RibbonButtonStyle.Normal;
             _ts_returnV.Click += new EventHandler(tsb_Click);
-            _ts_returnV.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.shape_flip_horizontal;
+            _ts_returnV.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.shape_flip_horizontal;
 
             _ts_rotationL = new RibbonButton("Rotation left");
             _ts_rotationL.MinSizeMode = RibbonElementSizeMode.Compact;
             _ts_rotationL.Style = RibbonButtonStyle.Normal;
             _ts_rotationL.Click += new EventHandler(tsb_Click);
-            _ts_rotationL.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.shape_rotate_anticlockwise;
+            _ts_rotationL.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.shape_rotate_anticlockwise;
 
             _ts_rotationR = new RibbonButton("Rotation right");
             _ts_rotationR.MinSizeMode = RibbonElementSizeMode.Compact;
             _ts_rotationR.Style = RibbonButtonStyle.Normal;
             _ts_rotationR.Click += new EventHandler(tsb_Click);
-            _ts_rotationR.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.shape_rotate_clockwise;
+            _ts_rotationR.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.shape_rotate_clockwise;
 
             _ts_labelrotation = new RibbonLabel();
             _ts_labelrotation.Text = "Rotation : ";
@@ -665,11 +665,11 @@ namespace Droid.Image
 
             _ts_rotation = new RibbonButton("Rotation");
             _ts_rotation.Click += new EventHandler(tsb_Click);
-            _ts_rotation.Image = Tools4Libraries.Resources.ResourceIconSet16Default.transform_rotate;
+            _ts_rotation.Image = Tools.Utilities.Resources.ResourceIconSet16Default.transform_rotate;
 
             _ts_rotations = new RibbonButton("Rotations");
-            _ts_rotations.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.transform_rotate;
-            _ts_rotations.Image = Tools4Libraries.Resources.ResourceIconSet32Default.transform_rotate;
+            _ts_rotations.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.transform_rotate;
+            _ts_rotations.Image = Tools.Utilities.Resources.ResourceIconSet32Default.transform_rotate;
             _ts_rotations.Style = RibbonButtonStyle.SplitDropDown;
             _ts_rotations.MinSizeMode = RibbonElementSizeMode.DropDown;
             _ts_rotations.DropDownItems.Add(_ts_returnH);
@@ -681,39 +681,39 @@ namespace Droid.Image
         {
             _ts_resize = new RibbonButton("Resize");
             _ts_resize.Click += new EventHandler(tsb_Click);
-            _ts_resize.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.layer_to_image_size;
+            _ts_resize.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.layer_to_image_size;
             _ts_resize.MinSizeMode = RibbonElementSizeMode.DropDown;
 
             _ts_imgcenter = new RibbonButton("Center");
             _ts_imgcenter.Click += new EventHandler(tsb_Click);
             _ts_imgcenter.MinSizeMode = RibbonElementSizeMode.DropDown;
-            _ts_imgcenter.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.hardware_building_oem;
+            _ts_imgcenter.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.hardware_building_oem;
 
             _ts_imgstretch = new RibbonButton("Stretch");
             _ts_imgstretch.Click += new EventHandler(tsb_Click);
             _ts_imgstretch.MinSizeMode = RibbonElementSizeMode.DropDown;
-            _ts_imgstretch.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.transform_scale;
+            _ts_imgstretch.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.transform_scale;
 
             _ts_imgautosize = new RibbonButton("Autosize");
             _ts_imgautosize.Click += new EventHandler(tsb_Click);
             _ts_imgautosize.MinSizeMode = RibbonElementSizeMode.DropDown;
-            _ts_imgautosize.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.page_magnifier;
+            _ts_imgautosize.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.page_magnifier;
 
             _ts_imgzoom = new RibbonButton("Adjust");
             _ts_imgzoom.Click += new EventHandler(tsb_Click);
             _ts_imgzoom.MinSizeMode = RibbonElementSizeMode.DropDown;
-            _ts_imgzoom.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.zoom_extend;
+            _ts_imgzoom.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.zoom_extend;
 
             _ts_zoom = new RibbonUpDown();
             _ts_zoom.Text = "Zoom rate";
             _ts_zoom.Value = "100";
             _ts_zoom.MinSizeMode = RibbonElementSizeMode.DropDown;
             _ts_zoom.TextBoxTextChanged += tsb_Click;
-            _ts_zoom.Image = Tools4Libraries.Resources.ResourceIconSet32Default.zoom;
+            _ts_zoom.Image = Tools.Utilities.Resources.ResourceIconSet32Default.zoom;
 
             _ts_size = new RibbonButton("Size");
-            _ts_size.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.layer_to_image_size;
-            _ts_size.Image = Tools4Libraries.Resources.ResourceIconSet32Default.layer_to_image_size;
+            _ts_size.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.layer_to_image_size;
+            _ts_size.Image = Tools.Utilities.Resources.ResourceIconSet32Default.layer_to_image_size;
             _ts_size.Style = RibbonButtonStyle.SplitDropDown;
             _ts_size.MinSizeMode = RibbonElementSizeMode.DropDown;
             _ts_size.DropDownItems.Add(_ts_resize);
@@ -772,25 +772,25 @@ namespace Droid.Image
             _ts_font_bold = new RibbonButton();
             _ts_font_bold.ToolTip = "Bold";
             _ts_font_bold.Click += new EventHandler(tsb_Click);
-            _ts_font_bold.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.text_bold;
+            _ts_font_bold.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.text_bold;
             _ts_font_bold.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_font_italic = new RibbonButton();
             _ts_font_italic.ToolTip = "Italic";
             _ts_font_italic.Click += new EventHandler(tsb_Click);
-            _ts_font_italic.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.text_italic;
+            _ts_font_italic.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.text_italic;
             _ts_font_italic.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_font_underline = new RibbonButton();
             _ts_font_underline.ToolTip = "Underline";
             _ts_font_underline.Click += new EventHandler(tsb_Click);
-            _ts_font_underline.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.text_underline;
+            _ts_font_underline.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.text_underline;
             _ts_font_underline.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_font_strikethrought = new RibbonButton();
             _ts_font_strikethrought.ToolTip = "Strikethrouht";
             _ts_font_strikethrought.Click += new EventHandler(tsb_Click);
-            _ts_font_strikethrought.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.text_strikethroungh;
+            _ts_font_strikethrought.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.text_strikethroungh;
             _ts_font_strikethrought.MinSizeMode = RibbonElementSizeMode.Compact;
         }
         private void BuildToolsDrawing()
@@ -798,75 +798,75 @@ namespace Droid.Image
             _ts_draw_pencil = new RibbonButton();
             _ts_draw_pencil.ToolTip = "Pencil";
             _ts_draw_pencil.Click += new EventHandler(tsb_Click);
-            _ts_draw_pencil.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.pencil;
+            _ts_draw_pencil.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.pencil;
             _ts_draw_pencil.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_draw_fill = new RibbonButton();
             _ts_draw_fill.ToolTip = "Fill color";
             _ts_draw_fill.Click += new EventHandler(tsb_Click);
-            _ts_draw_fill.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.paintcan;
+            _ts_draw_fill.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.paintcan;
             _ts_draw_fill.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_draw_text = new RibbonButton();
             _ts_draw_text.ToolTip = "Add text";
             _ts_draw_text.Name = _ts_draw_pencil.ToolTip;
             _ts_draw_text.Click += new EventHandler(tsb_Click);
-            _ts_draw_text.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.font;
+            _ts_draw_text.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.font;
             _ts_draw_text.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_draw_erase = new RibbonButton();
             _ts_draw_erase.ToolTip = "Erase";
             _ts_draw_erase.Click += new EventHandler(tsb_Click);
-            _ts_draw_erase.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.draw_eraser;
+            _ts_draw_erase.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.draw_eraser;
             _ts_draw_erase.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_draw_color_pick = new RibbonButton();
             _ts_draw_color_pick.ToolTip = "Color picker";
             _ts_draw_color_pick.Click += new EventHandler(tsb_Click);
-            _ts_draw_color_pick.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.select_by_color;
+            _ts_draw_color_pick.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.select_by_color;
             _ts_draw_color_pick.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_draw_line = new RibbonButton();
             _ts_draw_line.ToolTip = "Draw line";
             _ts_draw_line.Click += new EventHandler(tsb_Click);
-            _ts_draw_line.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.draw_line;
+            _ts_draw_line.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.draw_line;
             _ts_draw_line.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_draw_shape = new RibbonButton();
             _ts_draw_shape.ToolTip = "Shape";
             _ts_draw_shape.Click += new EventHandler(tsb_Click);
-            _ts_draw_shape.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.draw_polygon;
+            _ts_draw_shape.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.draw_polygon;
             _ts_draw_shape.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_draw_color = new RibbonButton();
             _ts_draw_color.ToolTip = "Color pallet";
             _ts_draw_color.Click += new EventHandler(tsb_Click);
-            _ts_draw_color.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.color_management;
+            _ts_draw_color.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.color_management;
             _ts_draw_color.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_draw_magichands = new RibbonButton();
             _ts_draw_magichands.ToolTip = "Magic hand";
             _ts_draw_magichands.Name = _ts_draw_pencil.ToolTip;
             _ts_draw_magichands.Click += new EventHandler(tsb_Click);
-            _ts_draw_magichands.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.magic_wand_2;
+            _ts_draw_magichands.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.magic_wand_2;
             _ts_draw_magichands.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_draw_paintbrush = new RibbonButton();
             _ts_draw_paintbrush.ToolTip = "Paint brush";
             _ts_draw_paintbrush.Click += new EventHandler(tsb_Click);
-            _ts_draw_paintbrush.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.paintbrush;
+            _ts_draw_paintbrush.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.paintbrush;
             _ts_draw_paintbrush.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_draw_select = new RibbonButton();
             _ts_draw_select.ToolTip = "Select";
             _ts_draw_select.Click += new EventHandler(tsb_Click);
-            _ts_draw_select.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.select;
+            _ts_draw_select.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.select;
             _ts_draw_select.MinSizeMode = RibbonElementSizeMode.Compact;
 
             _ts_draw_move = new RibbonButton();
             _ts_draw_move.ToolTip = "Move";
             _ts_draw_move.Click += new EventHandler(tsb_Click);
-            _ts_draw_move.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.hand;
+            _ts_draw_move.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.hand;
             _ts_draw_move.MinSizeMode = RibbonElementSizeMode.Compact;
         }
 
@@ -919,14 +919,14 @@ namespace Droid.Image
             _visibletoolpanel = !_visibletoolpanel;
             if (_visibletoolpanel)
             {
-                _ts_toolpanelvisible.Image = Tools4Libraries.Resources.ResourceIconSet32Default.setting_tools;
-                _ts_toolpanelvisible.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.setting_tools;
+                _ts_toolpanelvisible.Image = Tools.Utilities.Resources.ResourceIconSet32Default.setting_tools;
+                _ts_toolpanelvisible.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.setting_tools;
                 _ts_toolpanelvisible.Text = "Hide";
             }
             else
             {
-                _ts_toolpanelvisible.Image = Tools4Libraries.Resources.ResourceIconSet32Default.hammer;
-                _ts_toolpanelvisible.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.hammer;
+                _ts_toolpanelvisible.Image = Tools.Utilities.Resources.ResourceIconSet32Default.hammer;
+                _ts_toolpanelvisible.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.hammer;
                 _ts_toolpanelvisible.Text = "Unhide";
             }
 
@@ -944,12 +944,12 @@ namespace Droid.Image
                     {
                         if (button.Text.Equals("Google"))
                         {
-                            _ts_web_research.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.google;
+                            _ts_web_research.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.google;
                             _ts_web_research.Name = button.Text.ToLower();
                         }
                         if (button.Text.Equals("Flikr"))
                         {
-                            _ts_web_research.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.flickr;
+                            _ts_web_research.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.flickr;
                             _ts_web_research.Name = button.Text.ToLower();
                         }
                     }
@@ -987,11 +987,11 @@ namespace Droid.Image
         {
             if ((bool)sender)
             {
-                _ts_diaporama.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.control_pause;
+                _ts_diaporama.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.control_pause;
             }
             else
             {
-                _ts_diaporama.SmallImage = Tools4Libraries.Resources.ResourceIconSet16Default.control_play;
+                _ts_diaporama.SmallImage = Tools.Utilities.Resources.ResourceIconSet16Default.control_play;
             }
         }
         #endregion

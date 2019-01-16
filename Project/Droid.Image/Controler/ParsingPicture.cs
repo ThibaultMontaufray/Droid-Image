@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Reflection;
 using System.IO;
-using OpenCvSharp.CPlusPlus;
+using OpenCvSharp;
 
 namespace Droid.Image
 {
@@ -24,15 +24,15 @@ namespace Droid.Image
         {
             public FormStyle Style;
             public Color Color;
-            public OpenCvSharp.CPlusPlus.Point Point;
-            public OpenCvSharp.CPlusPlus.Size Axes;
+            public OpenCvSharp.Point Point;
+            public OpenCvSharp.Size Axes;
             public double Angle;
             public int StartAngle;
             public int EndAngle;
             public int Width;
             public int Height;
             public int Thickness;
-            public OpenCvSharp.CPlusPlus.Mat Src;
+            public OpenCvSharp.Mat Src;
         }
         #endregion
 
@@ -59,19 +59,19 @@ namespace Droid.Image
             List<DetectZone> zones = new List<DetectZone>();
             try
             {
-                var hog = new OpenCvSharp.CPlusPlus.HOGDescriptor();
-                hog.SetSVMDetector(OpenCvSharp.CPlusPlus.HOGDescriptor.GetDefaultPeopleDetector());
+                var hog = new OpenCvSharp.HOGDescriptor();
+                hog.SetSVMDetector(OpenCvSharp.HOGDescriptor.GetDefaultPeopleDetector());
 
                 Console.WriteLine("CheckDetectorSize: {0}", hog.CheckDetectorSize());
 
                 var watch = Stopwatch.StartNew();
 
-                OpenCvSharp.CPlusPlus.Rect[] found = hog.DetectMultiScale(OpenCvSharp.CPlusPlus.Mat.FromImageData(imgArray, OpenCvSharp.LoadMode.Unchanged), 0, new OpenCvSharp.CPlusPlus.Size(1, 1), null, 1.05, 2);
+                OpenCvSharp.Rect[] found = hog.DetectMultiScale(OpenCvSharp.Mat.FromImageData(imgArray, ImreadModes.Unchanged), 0, new OpenCvSharp.Size(1, 1), null, 1.05, 2);
 
                 watch.Stop();
                 Console.WriteLine("Detection time = {0}ms, {1} region(s) found", watch.ElapsedMilliseconds, found.Length);
 
-                foreach (OpenCvSharp.CPlusPlus.Rect rect in found)
+                foreach (OpenCvSharp.Rect rect in found)
                 {
                     //Rectangle rec = new Rectangle(
                     //    rect.X + (int)Math.Round(rect.Width * 0.1),
@@ -82,7 +82,7 @@ namespace Droid.Image
                     zones.Add(new DetectZone() {
                         Style = FormStyle.RECTANGLE,
                         Color = Color.Red,
-                        Point = new OpenCvSharp.CPlusPlus.Point(rect.X + (int)Math.Round(rect.Width * 0.1), rect.Y + (int)Math.Round(rect.Height * 0.1)),
+                        Point = new OpenCvSharp.Point(rect.X + (int)Math.Round(rect.Width * 0.1), rect.Y + (int)Math.Round(rect.Height * 0.1)),
                         Width = (int)Math.Round(rect.Width * 0.8),
                         Height = (int)Math.Round(rect.Height * 0.8)
                     });
@@ -110,34 +110,34 @@ namespace Droid.Image
             string path = string.Format("{0}\\XML_Recognition\\{1}.xml", workingFolder, objectName);
             if (!File.Exists(path)) { using (StreamWriter writer = new StreamWriter(path)) { writer.Write(recognigionFileData); } }
 
-            zones.AddRange(Process(col, imgArray, new OpenCvSharp.CPlusPlus.CascadeClassifier(path)));
+            zones.AddRange(Process(col, imgArray, new OpenCvSharp.CascadeClassifier(path)));
 
             return zones;
         }
         #endregion
 
         #region Methods private
-        private static List<DetectZone> Process(Color col, byte[] imgArray, OpenCvSharp.CPlusPlus.CascadeClassifier cascade)
+        private static List<DetectZone> Process(Color col, byte[] imgArray, OpenCvSharp.CascadeClassifier cascade)
         {
             List<DetectZone> zones = new List<DetectZone>();
 
-            using (var src = OpenCvSharp.CPlusPlus.Mat.FromImageData(imgArray))
-            using (var gray = new OpenCvSharp.CPlusPlus.Mat())
+            using (var src = OpenCvSharp.Mat.FromImageData(imgArray))
+            using (var gray = new OpenCvSharp.Mat())
             {
-                OpenCvSharp.CPlusPlus.Cv2.CvtColor(src, gray, OpenCvSharp.ColorConversion.BgrToGray);
+                OpenCvSharp.Cv2.CvtColor(src, gray, OpenCvSharp.ColorConversionCodes.BGRA2BGR);
 
                 // Detect faces
-                OpenCvSharp.CPlusPlus.Rect[] areas = cascade.DetectMultiScale(gray, 1.08, 2, HaarDetectionType.ScaleImage, new OpenCvSharp.CPlusPlus.Size(30, 30));
+                OpenCvSharp.Rect[] areas = cascade.DetectMultiScale(gray, 1.08, 2, HaarDetectionType.ScaleImage, new OpenCvSharp.Size(30, 30));
                 
                 // Render all detected faces
-                foreach (OpenCvSharp.CPlusPlus.Rect area in areas)
+                foreach (OpenCvSharp.Rect area in areas)
                 {
-                    //var center = new OpenCvSharp.CPlusPlus.Point
+                    //var center = new OpenCvSharp.Point
                     //{
                     //    X = (int)(face.X + face.Width * 0.5),
                     //    Y = (int)(face.Y + face.Height * 0.5)
                     //};
-                    //var axes = new OpenCvSharp.CPlusPlus.Size
+                    //var axes = new OpenCvSharp.Size
                     //{
                     //    Width = (int)(face.Width * 0.5),
                     //    Height = (int)(face.Height * 0.5)
@@ -155,7 +155,7 @@ namespace Droid.Image
                     {
                         Style = FormStyle.ELIPSE,
                         Color = col,
-                        Point = new OpenCvSharp.CPlusPlus.Point(area.X, area.Y - (int)Math.Round(area.Height * 0.2)),
+                        Point = new OpenCvSharp.Point(area.X, area.Y - (int)Math.Round(area.Height * 0.2)),
                         Width = (int)Math.Round(area.Width * 1.0),
                         Height = (int)Math.Round(area.Height * 1.2)
                     });
@@ -180,7 +180,7 @@ namespace Droid.Image
             return zones;
         }
 
-        //private static List<DetectZone> Process2(Color col, byte[] imgArray, OpenCvSharp.CPlusPlus.CascadeClassifier cascade)
+        //private static List<DetectZone> Process2(Color col, byte[] imgArray, OpenCvSharp.CascadeClassifier cascade)
         //{
         //    List<DetectZone> zones = new List<DetectZone>();
 
@@ -209,7 +209,7 @@ namespace Droid.Image
         //    // Unlock the bits.
         //    bmp.UnlockBits(bmpData);
 
-        //    Mat newImg = new OpenCvSharp.CPlusPlus.Mat(sourceImage.Height, sourceImage.Width, , CV_8UC3, ptrImageData);
+        //    Mat newImg = new OpenCvSharp.Mat(sourceImage.Height, sourceImage.Width, , CV_8UC3, ptrImageData);
 
 
         //    return zones;   

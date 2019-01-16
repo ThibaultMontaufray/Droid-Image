@@ -43,7 +43,7 @@ namespace Droid.Image.Comparison
         /// <param name="img2">The image to compare to</param>
         /// <param name="threshold">How big a difference (out of 255) will be ignored - the default is 3.</param>
         /// <returns>The difference between the two images as a percentage</returns>
-        public static float PercentageDifference(this System.Drawing.Image img1, System.Drawing.Image img2, byte threshold = 3)
+        public static float PercentageDifference(this System.Drawing.Bitmap img1, System.Drawing.Bitmap img2, byte threshold = 3)
         {
             byte[,] differences = img1.GetDifferences(img2);
 
@@ -64,7 +64,7 @@ namespace Droid.Image.Comparison
         /// <param name="img1">The first image to compare</param>
         /// <param name="img2">The second image to compare</param>
         /// <returns>The difference between the images' normalized histograms</returns>
-        public static float BhattacharyyaDifference(this System.Drawing.Image img1, System.Drawing.Image img2)
+        public static float BhattacharyyaDifference(this System.Drawing.Bitmap img1, System.Drawing.Bitmap img2)
         {
             byte[,] img1GrayscaleValues = img1.GetGrayScaleValues();
             byte[,] img2GrayscaleValues = img2.GetGrayScaleValues();
@@ -123,7 +123,7 @@ namespace Droid.Image.Comparison
         /// A false value would still have differences of 255 as bright pink resulting in the 12 difference still being very dark.</param>
         /// <param name="percentages">Whether to write percentages in each of the 255 squares (true) or the absolute value (false)</param>
         /// <returns>an image which displays the differences between two images</returns>
-        public static Bitmap GetDifferenceImage(this System.Drawing.Image img1, System.Drawing.Image img2, bool adjustColorSchemeToMaxDifferenceFound = false, bool absoluteText = false)
+        public static Bitmap GetDifferenceImage(this System.Drawing.Bitmap img1, System.Drawing.Bitmap img2, bool adjustColorSchemeToMaxDifferenceFound = false, bool absoluteText = false)
         {
             //create a 16x16 tiles image with information about how much the two images differ
             int cellsize = 16;  //each tile is 16 pixels wide and high
@@ -195,7 +195,7 @@ namespace Droid.Image.Comparison
         /// <param name="img1">The first image</param>
         /// <param name="img2">The image to compare with</param>
         /// <returns>the differences between the two images as a doublearray</returns>
-        public static byte[,] GetDifferences(this System.Drawing.Image img1, System.Drawing.Image img2)
+        public static byte[,] GetDifferences(this System.Drawing.Bitmap img1, System.Drawing.Bitmap img2)
         {
             Bitmap thisOne = (Bitmap)img1.Resize(16, 16).GetGrayScaleVersion();
             Bitmap theOtherOne = (Bitmap)img2.Resize(16, 16).GetGrayScaleVersion();
@@ -220,7 +220,7 @@ namespace Droid.Image.Comparison
         /// </summary>
         /// <param name="img">The image to get the lightness for</param>
         /// <returns>A doublearray (16x16) containing the lightness of the 256 sections</returns>
-        public static byte[,] GetGrayScaleValues(this System.Drawing.Image img)
+        public static byte[,] GetGrayScaleValues(this System.Drawing.Bitmap img)
         {
             using (Bitmap thisOne = (Bitmap)img.Resize(16, 16).GetGrayScaleVersion())
             {
@@ -243,7 +243,7 @@ namespace Droid.Image.Comparison
         /// </summary>
         /// <param name="original">The image to grayscale</param>
         /// <returns>A grayscale version of the image</returns>
-        public static System.Drawing.Image GetGrayScaleVersion(this System.Drawing.Image original)
+        public static System.Drawing.Bitmap GetGrayScaleVersion(this System.Drawing.Bitmap original)
         {
             //http://www.switchonthecode.com/tutorials/csharp-tutorial-convert-a-color-image-to-grayscale
             //create a blank bitmap the same size as original
@@ -274,9 +274,9 @@ namespace Droid.Image.Comparison
         /// <param name="newWidth">The new width in pixels</param>
         /// <param name="newHeight">The new height in pixels</param>
         /// <returns>A resized version of the original image</returns>
-        public static System.Drawing.Image Resize(this System.Drawing.Image originalImage, int newWidth, int newHeight)
+        public static System.Drawing.Bitmap Resize(this System.Drawing.Bitmap originalImage, int newWidth, int newHeight)
         {
-            System.Drawing.Image smallVersion = new Bitmap(newWidth, newHeight);
+            System.Drawing.Bitmap smallVersion = new Bitmap(newWidth, newHeight);
             using (Graphics g = Graphics.FromImage(smallVersion))
             {
                 g.SmoothingMode = SmoothingMode.HighQuality;

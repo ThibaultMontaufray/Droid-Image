@@ -7,20 +7,18 @@
  * 
  * Pour changer ce modèle utiliser Outils | Options | Codage | Editer les en-têtes standards.
  */
-using System.Runtime.Remoting.Messaging;
+//using System.Runtime.Remoting.Messaging;
 using System;
 using System.IO;
-using System.Windows.Forms;
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 using System.Collections.Generic;
 using System.Net;
-using Tools4Libraries;
 using System.ComponentModel;
 using System.Collections;
-using com.google.zxing;
-using com.google.zxing.common;
+using ZXing;
+//using com.google.zxing;
+//using com.google.zxing.common;
 using System.Threading.Tasks;
 using Tools.Slider;
 using System.Runtime.InteropServices;
@@ -28,7 +26,11 @@ using PdfConverter.Converters;
 using PdfSharp.Pdf;
 using PdfSharp.Drawing;
 using System.Diagnostics;
-using Droid_Image.ImageComparison;
+using Tools.Utilities;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Drawing.Drawing2D;
+using System.Timers;
 
 namespace Droid.Image
 {
@@ -76,13 +78,13 @@ namespace Droid.Image
         private TrackBar _trackbar;
         private Label _tracklabel;
         private Stream _stream;
-        private System.Drawing.Image _currentImage;
-        private System.Drawing.Image _comparisonImage;
+        private Bitmap _currentImage;
+        private Bitmap _comparisonImage;
         private bool _openned;
         private bool _visibletoolpanel;
         private double _zoomFactor;
         private Color _backColor;
-        private System.Drawing.Image _originalImage;
+        private Bitmap _originalImage;
         private string _imageviewmode;
         private ImageHandler _handler;
         private bool _flagCrop = false;
@@ -146,7 +148,7 @@ namespace Droid.Image
             get { return _textSearch; }
             set { _textSearch = value; _textSearchChanged = true; }
         }
-        public System.Drawing.Image CurrentImage
+        public Bitmap CurrentImage
         {
             get { return _currentImage; }
             set
@@ -155,7 +157,7 @@ namespace Droid.Image
                 if (ImageChanged != null) { ImageChanged(null, null); }
             }
         }
-        public System.Drawing.Image ComparisonImage
+        public Bitmap ComparisonImage
         {
             get { return _comparisonImage; }
             set { _comparisonImage = value; }
@@ -212,7 +214,7 @@ namespace Droid.Image
 
         #region Action
         [Description("french[prendre.image(nom)];english[take.picture(name)]")]
-        public static System.Drawing.Image ACTION_130_take_picture(string objet)
+        public static Bitmap ACTION_130_take_picture(string objet)
         {
             string html = GetHtmlCode(objet);
             List<string> urls = GetUrls(html);
@@ -225,7 +227,7 @@ namespace Droid.Image
             byte[] image = GetImage(luckyUrl);
             using (var ms = new MemoryStream(image))
             {
-                return System.Drawing.Image.FromStream(ms);
+                return new Bitmap(ms);
                 //Form f = new Form();
                 //f.Size = new Size(200, 200);
                 //f.FormBorderStyle = FormBorderStyle.FixedToolWindow;
@@ -236,34 +238,34 @@ namespace Droid.Image
             }
         }
         [Description("french[rogner.image(image,largeur,hauteur,haut,bas)];english[crop.picture(picture,width,height,top,left)]")]
-        public static System.Drawing.Image ACTION_131_crop_picture(System.Drawing.Image picture, int width, int height, int top, int left)
+        public static Bitmap ACTION_131_crop_picture(Bitmap picture, int width, int height, int top, int left)
         {
             return cropImage(picture, new Rectangle(left, top, width, height));
         }
         [Description("french[redimentionner.image(image,largeur,hauteur)];english[resize.picture(picture,width,height)]")]
-        public static System.Drawing.Image ACTION_132_resize_picture(System.Drawing.Image picture, int width, int height)
+        public static Bitmap ACTION_132_resize_picture(Bitmap picture, int width, int height)
         {
             return resizeImage(picture, new Size(width, height));
         }
         [Description("french[tourner.vertical(image)];english[flip.vertical(picture)]")]
-        public static System.Drawing.Image ACTION_133_flip_vertical(System.Drawing.Image picture)
+        public static Bitmap ACTION_133_flip_vertical(Bitmap picture)
         {
             picture.RotateFlip(RotateFlipType.Rotate180FlipY);
             return picture;
         }
         [Description("french[tourner.horisontal(image)];english[flip.horizontal(picture)]")]
-        public static System.Drawing.Image ACTION_134_flip_horizontal(System.Drawing.Image picture)
+        public static Bitmap ACTION_134_flip_horizontal(Bitmap picture)
         {
             picture.RotateFlip(RotateFlipType.Rotate180FlipX);
             return picture;
         }
         [Description("french[chercher.internet(image.nom)];english[research.web(picture.name)]")]
-        public static System.Drawing.Image ACTION_135_research_web(string pictureName)
+        public static Bitmap ACTION_135_research_web(string pictureName)
         {
             string fileName = Path.Combine(WORKINGDIRECTORY, pictureName.Replace(' ', '_'));
             if (File.Exists(fileName))
             {
-                System.Drawing.Image img = System.Drawing.Image.FromFile(Path.Combine(WORKINGDIRECTORY, pictureName));
+                Bitmap img = new Bitmap(Path.Combine(WORKINGDIRECTORY, pictureName));
                 return img;
             }
             _this.TextSearch = pictureName;
@@ -272,14 +274,14 @@ namespace Droid.Image
             return _this._picturebox.Image;
         }
         [Description("french[chercher.internet(icon.nom)];english[research.web(icon.name)]")]
-        public static System.Drawing.Image ACTION_135_research_icon(string iconName)
+        public static Bitmap ACTION_135_research_icon(string iconName)
         {
             try
             {
                 string fileName = Path.Combine(WORKINGDIRECTORY, "icon_" + iconName.Replace(' ', '_'));
                 if (File.Exists(fileName))
                 {
-                    System.Drawing.Image img = System.Drawing.Image.FromFile(fileName);
+                    Bitmap img = new Bitmap(fileName);
                     return img;
                 }
                 _this.TextSearch = iconName;
@@ -294,21 +296,21 @@ namespace Droid.Image
             }
         }
         [Description("french[serialiser.image(image)];english[serialize.image(picture)]")]
-        public static string ACTION_136_serialize_image(System.Drawing.Image image)
+        public static string ACTION_136_serialize_image(Bitmap image)
         {
             _this.CurrentImage = image;
             _this.LaunchSerializeImage();
             return _this._serialiseString;
         }
         [Description("french[deserialiser.image(string)];english[unserialize.image(string)]")]
-        public static System.Drawing.Image ACTION_137_unserialize_image(string serialise)
+        public static Bitmap ACTION_137_unserialize_image(string serialise)
         {
             _this._serialiseString = serialise;
             _this.LaunchUnserializeString();
             return _this._currentImage;
         }
         [Description("french[appliquer.masque(image,masque)];english[apply.mask(image,mask)]")]
-        public static System.Drawing.Image ACTION_138_apply_mask(System.Drawing.Image image, System.Drawing.Image mask = null)
+        public static Bitmap ACTION_138_apply_mask(Bitmap image, Bitmap mask = null)
         {
             _this.CurrentImage = image;
             if (mask != null) _this.Mask = new Bitmap(mask);
@@ -316,7 +318,7 @@ namespace Droid.Image
             return _this._currentImage;
         }
         [Description("french[comparer.image(première_image,seconde_image)];english[compare.image(first_image,second_image)]")]
-        public static int ACTION_139_compare(System.Drawing.Image first_image, System.Drawing.Image second_image)
+        public static int ACTION_139_compare(Bitmap first_image, Bitmap second_image)
         {
             _this.CurrentImage = first_image;
             _this.ComparisonImage = second_image;
@@ -336,7 +338,7 @@ namespace Droid.Image
             document.Save(file);
         }
         [Description("french[télécharger.image(url)];english[download.image(url)]")]
-        public static System.Drawing.Image ACTION_141_download_image(string url)
+        public static Bitmap ACTION_141_download_image(string url)
         {
             try
             {
@@ -345,7 +347,7 @@ namespace Droid.Image
                 webRequest.Timeout = 30000;
                 System.Net.WebResponse webResponse = webRequest.GetResponse();
                 System.IO.Stream stream = webResponse.GetResponseStream();
-                System.Drawing.Image image = System.Drawing.Image.FromStream(stream);
+                Bitmap image = new Bitmap(stream);
                 webResponse.Close();
                 return image;
             }
@@ -427,8 +429,8 @@ namespace Droid.Image
         {
             if (_visibletoolpanel)
             {
-                _sheet.Size = new System.Drawing.Size(_tsm.CurrentTabPage.Parent.Width - 130, _tsm.CurrentTabPage.Parent.Height - 45);
-                _panelTools.Size = new System.Drawing.Size(120, _tsm.CurrentTabPage.Parent.Height - 45);
+                _sheet.Size = new Size(_tsm.CurrentTabPage.Parent.Width - 130, _tsm.CurrentTabPage.Parent.Height - 45);
+                _panelTools.Size = new Size(120, _tsm.CurrentTabPage.Parent.Height - 45);
                 _panelTools.Left = _sheet.Width;
 
                 _picturebox.Refresh();
@@ -438,7 +440,7 @@ namespace Droid.Image
             {
                 if (_tsm.CurrentTabPage != null && _sheet != null && _picturebox != null && _tsm.CurrentTabPage.Parent != null)
                 {
-                    _sheet.Size = new System.Drawing.Size(_tsm.CurrentTabPage.Parent.Width - 10, _tsm.CurrentTabPage.Parent.Height - 45);
+                    _sheet.Size = new Size(_tsm.CurrentTabPage.Parent.Width - 10, _tsm.CurrentTabPage.Parent.Height - 45);
                 }
                 if (_picturebox != null) _picturebox.Refresh();
             }
@@ -692,7 +694,7 @@ namespace Droid.Image
 
             return Color.FromArgb(color.A, (int)red, (int)green, (int)blue);
         }
-        public static System.Drawing.Image Brightness(System.Drawing.Image img, float correctionFactor)
+        public static Bitmap Brightness(Bitmap img, float correctionFactor)
         {
             float FinalValue = (float)correctionFactor / 255.0f;
             ColorMatrix TempMatrix = new ColorMatrix();
@@ -705,7 +707,7 @@ namespace Droid.Image
              };
             return TempMatrix.Apply(img);
         }
-        public static System.Drawing.Image ConvertSepiaTone(System.Drawing.Image img)
+        public static Bitmap ConvertSepiaTone(Bitmap img)
         {
             ColorMatrix TempMatrix = new ColorMatrix();
             TempMatrix.Matrix = new float[][]{
@@ -717,12 +719,12 @@ namespace Droid.Image
                 };
             return TempMatrix.Apply(img);
         }
-        public static System.Drawing.Image KuwaharaBlur(System.Drawing.Image img, int Size)
+        public static Bitmap KuwaharaBlur(Bitmap img, int Size)
         {
-            System.Drawing.Bitmap TempBitmap = new Bitmap(img);
-            System.Drawing.Bitmap NewBitmap = new System.Drawing.Bitmap(TempBitmap.Width, TempBitmap.Height);
-            System.Drawing.Graphics NewGraphics = System.Drawing.Graphics.FromImage(NewBitmap);
-            NewGraphics.DrawImage(TempBitmap, new System.Drawing.Rectangle(0, 0, TempBitmap.Width, TempBitmap.Height), new System.Drawing.Rectangle(0, 0, TempBitmap.Width, TempBitmap.Height), System.Drawing.GraphicsUnit.Pixel);
+            Bitmap TempBitmap = new Bitmap(img);
+            Bitmap NewBitmap = new Bitmap(TempBitmap.Width, TempBitmap.Height);
+            Graphics NewGraphics = Graphics.FromImage(NewBitmap);
+            NewGraphics.DrawImage(TempBitmap, new Rectangle(0, 0, TempBitmap.Width, TempBitmap.Height), new Rectangle(0, 0, TempBitmap.Width, TempBitmap.Height), GraphicsUnit.Pixel);
             NewGraphics.Dispose();
             Random TempRandom = new Random();
             int[] ApetureMinX = { -(Size / 2), 0, -(Size / 2), 0 };
@@ -809,9 +811,9 @@ namespace Droid.Image
                     NewBitmap.SetPixel(x, y, MeanPixel);
                 }
             }
-            return (System.Drawing.Image)NewBitmap;
+            return (Bitmap)NewBitmap;
         }
-        public static System.Drawing.Image AdjustContrast(System.Drawing.Image OriginalImage, float Value)
+        public static Bitmap AdjustContrast(Bitmap OriginalImage, float Value)
         {
             Bitmap NewBitmap = new Bitmap(OriginalImage.Width, OriginalImage.Height);
             //BitmapData NewData = Image.LockImage(NewBitmap);
@@ -843,12 +845,12 @@ namespace Droid.Image
             //Image.UnlockImage(OriginalImage, OldData);
             return NewBitmap;
         }
-        public static System.Drawing.Image Dilate(System.Drawing.Image img, int Size)
+        public static Bitmap Dilate(Bitmap img, int Size)
         {
-            System.Drawing.Bitmap TempBitmap = new Bitmap(img);
-            System.Drawing.Bitmap NewBitmap = new System.Drawing.Bitmap(TempBitmap.Width, TempBitmap.Height);
-            System.Drawing.Graphics NewGraphics = System.Drawing.Graphics.FromImage(NewBitmap);
-            NewGraphics.DrawImage(TempBitmap, new System.Drawing.Rectangle(0, 0, TempBitmap.Width, TempBitmap.Height), new System.Drawing.Rectangle(0, 0, TempBitmap.Width, TempBitmap.Height), System.Drawing.GraphicsUnit.Pixel);
+            Bitmap TempBitmap = new Bitmap(img);
+            Bitmap NewBitmap = new Bitmap(TempBitmap.Width, TempBitmap.Height);
+            Graphics NewGraphics = Graphics.FromImage(NewBitmap);
+            NewGraphics.DrawImage(TempBitmap, new Rectangle(0, 0, TempBitmap.Width, TempBitmap.Height), new Rectangle(0, 0, TempBitmap.Width, TempBitmap.Height), GraphicsUnit.Pixel);
             NewGraphics.Dispose();
             Random TempRandom = new Random();
             int ApetureMin = -(Size / 2);
@@ -941,10 +943,10 @@ namespace Droid.Image
         //}
         public static Bitmap MedianFilter(Bitmap Image, int Size)
         {
-            System.Drawing.Bitmap TempBitmap = Image;
-            System.Drawing.Bitmap NewBitmap = new System.Drawing.Bitmap(TempBitmap.Width, TempBitmap.Height);
-            System.Drawing.Graphics NewGraphics = System.Drawing.Graphics.FromImage(NewBitmap);
-            NewGraphics.DrawImage(TempBitmap, new System.Drawing.Rectangle(0, 0, TempBitmap.Width, TempBitmap.Height), new System.Drawing.Rectangle(0, 0, TempBitmap.Width, TempBitmap.Height), System.Drawing.GraphicsUnit.Pixel);
+            Bitmap TempBitmap = Image;
+            Bitmap NewBitmap = new Bitmap(TempBitmap.Width, TempBitmap.Height);
+            Graphics NewGraphics = Graphics.FromImage(NewBitmap);
+            NewGraphics.DrawImage(TempBitmap, new System.DrawingCore.Rectangle(0, 0, TempBitmap.Width, TempBitmap.Height), new Rectangle(0, 0, TempBitmap.Width, TempBitmap.Height), GraphicsUnit.Pixel);
             NewGraphics.Dispose();
             Random TempRandom = new Random();
             int ApetureMin = -(Size / 2);
@@ -1014,7 +1016,7 @@ namespace Droid.Image
                 if (_stream != null) { _stream.Close(); }
                 PathFile = ofd.FileName;
                 _stream = File.OpenRead(PathFile);
-                CurrentImage = Bitmap.FromFile(PathFile);
+                CurrentImage = new Bitmap(PathFile);
             }
             ProcessOpenned();
         }
@@ -1056,25 +1058,25 @@ namespace Droid.Image
         }
         private void LaunchReturnV()
         {
-            System.Drawing.Image img = _picturebox.Image;
+            Bitmap img = _picturebox.Image;
             img.RotateFlip(RotateFlipType.Rotate180FlipY);
             _picturebox.Image = img;
         }
         private void LaunchReturnH()
         {
-            System.Drawing.Image img = _picturebox.Image;
+            Bitmap img = _picturebox.Image;
             img.RotateFlip(RotateFlipType.Rotate180FlipX);
             _picturebox.Image = img;
         }
         private void LaunchRotationL()
         {
-            System.Drawing.Image img = _picturebox.Image;
+            Bitmap img = _picturebox.Image;
             img.RotateFlip(RotateFlipType.Rotate270FlipNone);
             _picturebox.Image = img;
         }
         private void LaunchRotationR()
         {
-            System.Drawing.Image img = _picturebox.Image;
+            Bitmap img = _picturebox.Image;
             img.RotateFlip(RotateFlipType.Rotate90FlipNone);
             _picturebox.Image = img;
         }
@@ -1111,7 +1113,7 @@ namespace Droid.Image
                     if (_stream != null) { _stream.Close(); }
                     PathFile = fichiers[index];
                     _stream = File.OpenRead(PathFile);
-                    CurrentImage = Bitmap.FromFile(PathFile);
+                    CurrentImage = new Bitmap(PathFile);
                     ProcessOpenned();
                 }
             }
@@ -1148,7 +1150,7 @@ namespace Droid.Image
                     if (_stream != null) { _stream.Close(); }
                     PathFile = fichiers[index];
                     _stream = File.OpenRead(PathFile);
-                    CurrentImage = Bitmap.FromFile(PathFile);
+                    CurrentImage = new Bitmap(PathFile);
                     ProcessOpenned();
                 }
             }
@@ -1454,7 +1456,7 @@ namespace Droid.Image
                     {
                         using (Stream stream = webResponse.GetResponseStream())
                         { 
-                            CurrentImage = System.Drawing.Image.FromStream(stream);
+                            CurrentImage = new Bitmap(stream);
                             if (_currentImage != null)
                             {
                                 _pictureByte = imageToByteArray(_currentImage);
@@ -1485,6 +1487,8 @@ namespace Droid.Image
             if (detection != null && detection.Count > 0) Console.WriteLine("found");
             foreach (ParsingPicture.DetectZone zone in detection)
             {
+                System.DrawingCore.Brush b;
+                b.c
                 using (Pen pen = new Pen(zone.Color, 1))
                 {
                     using (Graphics g = Graphics.FromImage(CurrentImage))
@@ -1591,7 +1595,7 @@ namespace Droid.Image
                     _currentImage = null;
                 }
                 byte[] array = Convert.FromBase64String(_serialiseString);
-                System.Drawing.Image image = System.Drawing.Image.FromStream(new MemoryStream(array));
+                Bitmap image = new Bitmap(new MemoryStream(array));
                 _currentImage = image;
             }
             else
@@ -1650,10 +1654,10 @@ namespace Droid.Image
                     OpenFileDialog ofd = new OpenFileDialog();
                     if (ofd.ShowDialog() == DialogResult.OK)
                     {
-                        _comparisonImage = System.Drawing.Image.FromFile(ofd.FileName);
+                        _comparisonImage = Bitmap.FromFile(ofd.FileName);
                     }
                 }
-                System.Drawing.Image clone = (System.Drawing.Image)_currentImage.Clone();
+                Bitmap clone = (Bitmap)_currentImage.Clone();
                 difference = (int)(ImageTool.GetPercentageDifference(clone, _comparisonImage) * 100);
                 _comparisonImage = null;
             }
@@ -1693,16 +1697,16 @@ namespace Droid.Image
         #endregion
 
         #region Methods Private
-        private byte[] imageToByteArray(System.Drawing.Image imageIn)
+        private byte[] imageToByteArray(Bitmap imageIn)
         {
             MemoryStream ms = new MemoryStream();
-            imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
+            imageIn.Save(ms, System.DrawingCore.Imaging.ImageFormat.Gif);
             return ms.ToArray();
         }
-        private System.Drawing.Image byteArrayToImage(byte[] byteArrayIn)
+        private Bitmap byteArrayToImage(byte[] byteArrayIn)
         {
             MemoryStream ms = new MemoryStream(byteArrayIn);
-            System.Drawing.Image returnImage = System.Drawing.Image.FromStream(ms);
+            Bitmap returnImage = new Bitmap((Stream)ms);
             return returnImage;
         }
         private void EnableMouseScan()
@@ -1873,8 +1877,8 @@ namespace Droid.Image
                 _sheet.BackColor = Color.Pink;
 
                 _trackBar = new SliderTrackBar();
-                _trackBar.BackColor = System.Drawing.Color.Transparent;
-                _trackBar.EmptyTrackColor = System.Drawing.Color.Black;
+                _trackBar.BackColor = Color.Transparent;
+                _trackBar.EmptyTrackColor = Color.Black;
                 _trackBar.AllowUserValueChange = false;
                 _trackBar.AllowMouseWheelChange = false;
                 _trackBar.AllowDrop = false;
@@ -1904,7 +1908,7 @@ namespace Droid.Image
                 _sheet.Controls.Add(_picturebox);
 
                 _buttonValidation = new Button();
-                _buttonValidation.Image = Tools4Libraries.Resources.ResourceIconSet32Default.accept;
+                _buttonValidation.Image = Tools.Utilities.Resources.ResourceIconSet32Default.accept;
                 _buttonValidation.BackColor = Color.Transparent;
                 _buttonValidation.UseVisualStyleBackColor = false;
                 _buttonValidation.FlatAppearance.BorderSize = 0;
@@ -1921,7 +1925,7 @@ namespace Droid.Image
 
                 _timer = new Timer();
                 _timer.Interval = 5000;
-                _timer.Tick += _timer_Tick;
+                _timer.Elapsed += _timer_Tick;
             }
         }
 
@@ -1950,14 +1954,14 @@ namespace Droid.Image
             }
             return null;
         }
-        private static System.Drawing.Image cropImage(System.Drawing.Image img, Rectangle cropArea)
+        private static Bitmap cropImage(Bitmap img, Rectangle cropArea)
         {
             Bitmap bmpImage = new Bitmap(img);
             Bitmap bmpCrop = bmpImage.Clone(cropArea,
                                             bmpImage.PixelFormat);
-            return (System.Drawing.Image)(bmpCrop);
+            return bmpCrop;
         }
-        private static System.Drawing.Image resizeImage(System.Drawing.Image imgToResize, Size size)
+        private static Bitmap resizeImage(Bitmap imgToResize, Size size)
         {
             int sourceWidth = imgToResize.Width;
             int sourceHeight = imgToResize.Height;
@@ -1978,21 +1982,21 @@ namespace Droid.Image
             int destHeight = (int)(sourceHeight * nPercent);
 
             Bitmap b = new Bitmap(destWidth, destHeight);
-            Graphics g = Graphics.FromImage((System.Drawing.Image)b);
+            Graphics g = Graphics.FromImage(b);
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
             g.DrawImage(imgToResize, 0, 0, destWidth, destHeight);
             g.Dispose();
 
-            return (System.Drawing.Image)b;
+            return b;
         }
         private void RotateImage(float angle)
         {
             if (_picturebox.Image == null)
                 return;
 
-            System.Drawing.Image oldImage = _picturebox.Image;
-            System.Drawing.Image newImage = RotateImage(_picturebox.Image, angle);
+            Bitmap oldImage = _picturebox.Image;
+            Bitmap newImage = RotateImage(_picturebox.Image, angle);
 
             _picturebox.Image = newImage;
             _picturebox.Refresh();
@@ -2002,7 +2006,7 @@ namespace Droid.Image
                 oldImage.Dispose();
             }
         }
-        private static Bitmap RotateImage(System.Drawing.Image image, float angle)
+        private static Bitmap RotateImage(Bitmap image, float angle)
         {
             if (image == null) Log.Write("[ERR : 0300] No Image found !");
 
@@ -2077,7 +2081,7 @@ namespace Droid.Image
 
             // Create a new temporary bitmap to resize the original image
             // The size of this bitmap is the size of the picImage picturebox.
-            Bitmap tempBitmap = new Bitmap(_picturebox.Width, _picturebox.Height, PixelFormat.Format24bppRgb);
+            Bitmap tempBitmap = new Bitmap((int)_picturebox.Width, (int)_picturebox.Height, PixelFormat.Format24bppRgb);
 
             // Set the resolution of the bitmap to match the original resolution.
             tempBitmap.SetResolution(_originalImage.HorizontalResolution, _originalImage.VerticalResolution);
@@ -2136,7 +2140,7 @@ namespace Droid.Image
             _trackbar.Maximum = 6;
             _trackbar.Minimum = 2;
             _trackbar.Name = "trackbar";
-            _trackbar.Size = new System.Drawing.Size(100, 20);
+            _trackbar.Size = new Size(100, 20);
             _trackbar.Value = 3;
             _trackbar.Top = 120;
             _trackbar.Left = 0;
@@ -2147,7 +2151,7 @@ namespace Droid.Image
             _tracklabel = new Label();
             _tracklabel.BackColor = Color.WhiteSmoke;
             _tracklabel.Name = "tracklabel";
-            _tracklabel.Size = new System.Drawing.Size(18, 13);
+            _tracklabel.Size = new Size(18, 13);
             _tracklabel.TabIndex = 4;
             _tracklabel.Text = "x3";
             _tracklabel.Top = 125;
@@ -2165,12 +2169,12 @@ namespace Droid.Image
         {
             try
             {
-                com.google.zxing.MultiFormatReader reader = new com.google.zxing.MultiFormatReader();
+                ZXing.MultiFormatReader reader = new ZXing.MultiFormatReader();
                 Hashtable hints = new Hashtable();
                 ArrayList fmts = new ArrayList();
-                fmts.Add(BarcodeFormat.DATAMATRIX);
+                fmts.Add(BarcodeFormat.DATA_MATRIX);
                 fmts.Add(BarcodeFormat.QR_CODE);
-                fmts.Add(BarcodeFormat.PDF417);
+                fmts.Add(BarcodeFormat.PDF_417);
                 fmts.Add(BarcodeFormat.UPC_E);
                 fmts.Add(BarcodeFormat.UPC_A);
                 fmts.Add(BarcodeFormat.CODE_128);
@@ -2182,7 +2186,7 @@ namespace Droid.Image
                 hints.Add(DecodeHintType.POSSIBLE_FORMATS, fmts);
                 reader.Hints = hints;
 
-                RGBLuminanceSource lumi = new RGBLuminanceSource((Bitmap)CurrentImage, CurrentImage.Width, CurrentImage.Height);
+                RGBLuminanceSource lumi = new RGBLuminanceSource(CurrentImage, CurrentImage.Width, CurrentImage.Height);
 
                 Result result = new Result(string.Empty, null, null, BarcodeFormat.QR_CODE);
                 OnMessageAvailable(MessageDisplay.Message.ANALYSING, null);
@@ -2477,11 +2481,11 @@ namespace Droid.Image
         }
         private void _buttonValidation_MouseLeave(object sender, EventArgs e)
         {
-            _buttonValidation.Image = Tools4Libraries.Resources.ResourceIconSet32Default.accept;
+            _buttonValidation.Image = Tools.Utilities.Resources.ResourceIconSet32Default.accept;
         }
         private void _buttonValidation_MouseHover(object sender, EventArgs e)
         {
-            _buttonValidation.Image = Tools4Libraries.Resources.ResourceIconSet32Default.accept;
+            _buttonValidation.Image = Tools.Utilities.Resources.ResourceIconSet32Default.accept;
         }
         private void _timer_Tick(object sender, EventArgs e)
         {

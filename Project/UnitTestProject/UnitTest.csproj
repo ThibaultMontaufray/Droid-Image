@@ -129,9 +129,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Droid.Image.csproj">
+    <ProjectReference Include="..\Droid.Image.UI\Droid.Image.UI.csproj">
       <Project>{9fd7aaf3-3236-474a-9017-be10bf369e7e}</Project>
-      <Name>Droid.Image</Name>
+      <Name>Droid.Image.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
